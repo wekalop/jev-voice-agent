@@ -1,0 +1,151 @@
+{
+  "as_of": "2026-11-03T09:00",
+  "notes": "Mock data. For prepaid lines balance_egp is credit available. For postpaid and home lines balance_egp is the amount owed. The verification block is for checking what a caller says and must never be read aloud.",
+  "customers": [
+    {
+      "id": "CUST-1001", "name": "Mona Adel", "phone": "01995550101", "city": "Cairo", "area": "Nasr City",
+      "plan": "Go Smart", "line_status": "active", "balance_egp": 42.5, "bill_status": "no_bill_prepaid", "bill": null,
+      "renewal_date": "2026-11-14",
+      "data_usage": {"used_gb": 5.2, "allowance_gb": 8, "rollover_gb": 0, "resets_on": "2026-11-14"},
+      "active_bundles": [], "device_installment": null, "open_tickets": [], "open_orders": [],
+      "verification": {"national_id_last4": "4471", "date_of_birth": "1990-05-12"},
+      "notes": "Balance is below the renewal price of the plan."
+    },
+    {
+      "id": "CUST-1002", "name": "Youssef Samir", "phone": "01995550102", "city": "Alexandria", "area": "Smouha",
+      "plan": "Go Youth", "line_status": "active", "balance_egp": 15, "bill_status": "no_bill_prepaid", "bill": null,
+      "renewal_date": "2026-11-06",
+      "data_usage": {"used_gb": 11.4, "allowance_gb": 12, "rollover_gb": 0, "resets_on": "2026-11-06"},
+      "active_bundles": [], "device_installment": null, "open_tickets": [], "open_orders": [],
+      "verification": {"national_id_last4": "9023", "date_of_birth": "2001-03-14"},
+      "notes": "Turns twenty-six in March 2027. Balance will not cover the next renewal."
+    },
+    {
+      "id": "CUST-1003", "name": "Salma Fathy", "phone": "01995550103", "city": "Cairo", "area": "Maadi",
+      "plan": "Flex Gold", "line_status": "active", "balance_egp": 0, "bill_status": "paid",
+      "bill": {"bill_date": "2026-10-20", "due_date": "2026-11-03", "charges": [{"label": "Plan fee", "amount_egp": 475}], "payments_egp": 475, "amount_due_egp": 0},
+      "renewal_date": null,
+      "data_usage": {"used_gb": 31.7, "allowance_gb": 68, "rollover_gb": 8, "resets_on": "2026-11-20"},
+      "active_bundles": [], "device_installment": null, "open_tickets": [], "open_orders": ["ORD-7006"],
+      "verification": {"national_id_last4": "3158", "date_of_birth": "1985-11-02"},
+      "notes": ""
+    },
+    {
+      "id": "CUST-1004", "name": "Karim Nabil", "phone": "01995550104", "city": "Cairo", "area": "Heliopolis",
+      "plan": "Flex Gold", "line_status": "active", "balance_egp": 505, "bill_status": "overdue",
+      "bill": {"bill_date": "2026-10-10", "due_date": "2026-10-24", "oldest_unpaid_due_date": "2026-10-24", "charges": [{"label": "Plan fee", "amount_egp": 475}, {"label": "Late fee", "amount_egp": 30}], "payments_egp": 0, "amount_due_egp": 505},
+      "renewal_date": null,
+      "data_usage": {"used_gb": 44.3, "allowance_gb": 60, "rollover_gb": 0, "resets_on": "2026-11-10"},
+      "active_bundles": [], "device_installment": null, "open_tickets": ["TCK-5008"], "open_orders": [],
+      "verification": {"national_id_last4": "6602", "date_of_birth": "1979-07-25"},
+      "notes": "Ten days past due. The line will be partly barred on the eighth of November if unpaid. No late fee waived in the last twelve months."
+    },
+    {
+      "id": "CUST-1005", "name": "Nour Hamdy", "phone": "01995550105", "city": "Cairo", "area": "Maadi",
+      "plan": "Home Fiber Fifty", "line_status": "active", "balance_egp": 450, "bill_status": "unpaid_not_due",
+      "bill": {"bill_date": "2026-11-01", "due_date": "2026-11-15", "charges": [{"label": "Plan fee", "amount_egp": 450}], "payments_egp": 0, "amount_due_egp": 450},
+      "renewal_date": null,
+      "data_usage": {"used_gb": 122.6, "allowance_gb": 400, "rollover_gb": 0, "resets_on": "2026-12-01"},
+      "active_bundles": [], "device_installment": null, "open_tickets": ["TCK-5001"], "open_orders": ["ORD-7008"],
+      "verification": {"national_id_last4": "1287", "date_of_birth": "1993-01-30"},
+      "notes": "Affected by outage OUT-2101."
+    },
+    {
+      "id": "CUST-1006", "name": "Ahmed Sherif", "phone": "01995550106", "city": "Cairo", "area": "New Cairo",
+      "plan": "Flex Platinum", "line_status": "active", "balance_egp": 190, "bill_status": "disputed",
+      "bill": {"bill_date": "2026-10-10", "due_date": "2026-10-24", "charges": [{"label": "Plan fee", "amount_egp": 800}, {"label": "Roaming, Zone Two Day Pass", "amount_egp": 190}], "payments_egp": 800, "amount_due_egp": 190},
+      "renewal_date": null,
+      "data_usage": {"used_gb": 38.9, "allowance_gb": 150, "rollover_gb": 0, "resets_on": "2026-11-10"},
+      "active_bundles": [], "device_installment": null, "open_tickets": ["TCK-5002"], "open_orders": [],
+      "verification": {"national_id_last4": "7740", "date_of_birth": "1975-09-08"},
+      "notes": "The one hundred ninety pounds is under dispute, so no late fee applies to it during review."
+    },
+    {
+      "id": "CUST-1007", "name": "Dina Mostafa", "phone": "01995550107", "city": "Tanta", "area": "Tanta Center",
+      "plan": "Go Mini", "line_status": "active", "balance_egp": 3.25, "bill_status": "no_bill_prepaid", "bill": null,
+      "renewal_date": "2026-11-09",
+      "data_usage": {"used_gb": 3.0, "allowance_gb": 3, "rollover_gb": 0, "resets_on": "2026-11-09"},
+      "active_bundles": [], "device_installment": null, "open_tickets": ["TCK-5010"], "open_orders": [],
+      "verification": {"national_id_last4": "5519", "date_of_birth": "1998-12-19"},
+      "notes": "All data is used. Balance cannot buy any bundle."
+    },
+    {
+      "id": "CUST-1008", "name": "Tarek Ibrahim", "phone": "01995550108", "city": "Giza", "area": "Sixth of October South",
+      "plan": "Home Air Pro", "line_status": "active", "balance_egp": 0, "bill_status": "paid",
+      "bill": {"bill_date": "2026-11-01", "due_date": "2026-11-15", "charges": [{"label": "Plan fee", "amount_egp": 650}], "payments_egp": 650, "amount_due_egp": 0},
+      "renewal_date": null,
+      "data_usage": {"used_gb": 210.4, "allowance_gb": 400, "rollover_gb": 0, "resets_on": "2026-12-01"},
+      "active_bundles": [], "device_installment": null, "open_tickets": ["TCK-5003"], "open_orders": [],
+      "verification": {"national_id_last4": "2046", "date_of_birth": "1988-04-03"},
+      "notes": "Affected by outage OUT-2104, which has no known fix time."
+    },
+    {
+      "id": "CUST-1009", "name": "Hana Lotfy", "phone": "01995550109", "city": "Mansoura", "area": "Mansoura Downtown",
+      "plan": "Flex Silver", "line_status": "suspended", "balance_egp": 660, "bill_status": "overdue",
+      "bill": {"bill_date": "2026-10-01", "due_date": "2026-10-15", "oldest_unpaid_due_date": "2026-09-15", "charges": [{"label": "Plan fee, September", "amount_egp": 300}, {"label": "Late fee, September", "amount_egp": 30}, {"label": "Plan fee, October", "amount_egp": 300}, {"label": "Late fee, October", "amount_egp": 30}], "payments_egp": 0, "amount_due_egp": 660},
+      "renewal_date": null,
+      "data_usage": {"used_gb": 0, "allowance_gb": 30, "rollover_gb": 0, "resets_on": null},
+      "active_bundles": [], "device_installment": null, "open_tickets": ["TCK-5004"], "open_orders": [],
+      "verification": {"national_id_last4": "8835", "date_of_birth": "1982-06-21"},
+      "notes": "Suspended on the fifteenth of October. To reconnect, the customer must pay six hundred sixty pounds plus the fifty pound reconnection fee, which is seven hundred ten pounds."
+    },
+    {
+      "id": "CUST-1010", "name": "Omar Reda", "phone": "01995550110", "city": "Giza", "area": "Sheikh Zayed",
+      "plan": "Go Plus", "line_status": "active", "balance_egp": 96, "bill_status": "no_bill_prepaid", "bill": null,
+      "renewal_date": "2026-11-21",
+      "data_usage": {"used_gb": 17.8, "allowance_gb": 38, "rollover_gb": 3, "resets_on": "2026-11-21"},
+      "active_bundles": [{"name": "Boost Month", "expires_on": "2026-11-25"}], "device_installment": null, "open_tickets": [], "open_orders": [],
+      "verification": {"national_id_last4": "3390", "date_of_birth": "1996-02-11"},
+      "notes": "Allowance is twenty from the plan, three of rollover, and fifteen from the bundle."
+    },
+    {
+      "id": "CUST-1011", "name": "Laila Gamal", "phone": "01995550111", "city": "Hurghada", "area": "Sakkala",
+      "plan": "Flex Silver", "line_status": "active", "balance_egp": 800, "bill_status": "unpaid_not_due",
+      "bill": {"bill_date": "2026-11-01", "due_date": "2026-11-15", "charges": [{"label": "Plan fee", "amount_egp": 300}, {"label": "Device installment, Kestrel A3", "amount_egp": 500}], "payments_egp": 0, "amount_due_egp": 800},
+      "renewal_date": null,
+      "data_usage": {"used_gb": 6.1, "allowance_gb": 30, "rollover_gb": 0, "resets_on": "2026-12-01"},
+      "active_bundles": [], "device_installment": {"device": "Kestrel A3", "months": 12, "monthly_egp": 500, "payments_made": 4}, "open_tickets": [], "open_orders": [],
+      "verification": {"national_id_last4": "6127", "date_of_birth": "1991-08-17"},
+      "notes": "This bill holds the fifth installment of twelve."
+    },
+    {
+      "id": "CUST-1012", "name": "Mahmoud Zaki", "phone": "01995550112", "city": "Aswan", "area": "Aswan Corniche",
+      "plan": "Home Air Lite", "line_status": "active", "balance_egp": 0, "bill_status": "paid",
+      "bill": {"bill_date": "2026-11-01", "due_date": "2026-11-15", "charges": [{"label": "Plan fee", "amount_egp": 350}], "payments_egp": 350, "amount_due_egp": 0},
+      "renewal_date": null,
+      "data_usage": {"used_gb": 140.7, "allowance_gb": 150, "rollover_gb": 0, "resets_on": "2026-12-01"},
+      "active_bundles": [], "device_installment": null, "open_tickets": ["TCK-5005"], "open_orders": ["ORD-7003"],
+      "verification": {"national_id_last4": "4908", "date_of_birth": "1970-10-05"},
+      "notes": ""
+    },
+    {
+      "id": "CUST-1013", "name": "Rania Saad", "phone": "01995550113", "city": "Luxor", "area": "Luxor Center",
+      "plan": "Go Week", "line_status": "active", "balance_egp": 61, "bill_status": "no_bill_prepaid", "bill": null,
+      "renewal_date": "2026-11-08",
+      "data_usage": {"used_gb": 0.4, "allowance_gb": 2, "rollover_gb": 0, "resets_on": "2026-11-08"},
+      "active_bundles": [], "device_installment": null, "open_tickets": [], "open_orders": [],
+      "verification": {"national_id_last4": "7251", "date_of_birth": "2000-04-27"},
+      "notes": "Go Week does not renew by itself, so the customer must buy it again on the eighth of November."
+    },
+    {
+      "id": "CUST-1014", "name": "Hossam Farid", "phone": "01995550114", "city": "Ismailia", "area": "Ismailia Center",
+      "plan": "Flex Platinum", "line_status": "active", "balance_egp": 0, "bill_status": "paid",
+      "bill": {"bill_date": "2026-10-20", "due_date": "2026-11-03", "charges": [{"label": "Plan fee", "amount_egp": 800}], "payments_egp": 800, "amount_due_egp": 0},
+      "renewal_date": null,
+      "data_usage": {"used_gb": 88.2, "allowance_gb": 150, "rollover_gb": 0, "resets_on": "2026-11-20"},
+      "active_bundles": [], "device_installment": null, "open_tickets": [], "open_orders": ["ORD-7002"],
+      "verification": {"national_id_last4": "1964", "date_of_birth": "1983-03-29"},
+      "notes": ""
+    },
+    {
+      "id": "CUST-1015", "name": "Yara Emad", "phone": "01995550115", "city": "Alexandria", "area": "Smouha",
+      "plan": "Home Fiber Two Hundred", "line_status": "active", "balance_egp": 0, "bill_status": "paid",
+      "bill": {"bill_date": "2026-11-01", "due_date": "2026-11-15", "charges": [{"label": "Plan fee", "amount_egp": 850}], "payments_egp": 850, "amount_due_egp": 0},
+      "renewal_date": null,
+      "data_usage": {"used_gb": 365.0, "allowance_gb": 1000, "rollover_gb": 0, "resets_on": "2026-12-01"},
+      "active_bundles": [], "device_installment": null, "open_tickets": ["TCK-5006"], "open_orders": [],
+      "verification": {"national_id_last4": "5082", "date_of_birth": "1994-07-09"},
+      "notes": ""
+    }
+  ]
+}

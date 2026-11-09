@@ -1,0 +1,199 @@
+{
+  "currency": "EGP",
+  "as_of": "2026-11-03",
+  "notes": "All prices include taxes. Same data as plans.md. Bundles with a null speed run at the speed of the caller's main plan.",
+  "plans": [
+    {
+      "id": "go_week", "name": "Go Week", "category": "prepaid",
+      "price_egp": 40, "price_spoken": "forty pounds",
+      "data_gb": 2, "minutes": 50, "validity_days": 7, "speed_mbps": 50, "network": "4G", "rollover_gb": 0,
+      "spoken_summary": "Go Week costs forty pounds for seven days. You get two gigabytes and fifty minutes.",
+      "fine_print": [
+        "It does not renew by itself. The customer must buy it again each week.",
+        "Roaming passes cannot be used on this plan.",
+        "Unused data and minutes end when the seven days end."
+      ]
+    },
+    {
+      "id": "go_mini", "name": "Go Mini", "category": "prepaid",
+      "price_egp": 70, "price_spoken": "seventy pounds",
+      "data_gb": 3, "minutes": 100, "validity_days": 30, "speed_mbps": 50, "network": "4G", "rollover_gb": 0,
+      "spoken_summary": "Go Mini costs seventy pounds for thirty days. You get three gigabytes and one hundred minutes.",
+      "fine_print": [
+        "Renews automatically from the balance.",
+        "Unused data does not roll over.",
+        "Roaming passes cannot be used on this plan."
+      ]
+    },
+    {
+      "id": "go_youth", "name": "Go Youth", "category": "prepaid",
+      "price_egp": 110, "price_spoken": "one hundred ten pounds",
+      "data_gb": 12, "minutes": 150, "validity_days": 30, "speed_mbps": 100, "network": "4G", "rollover_gb": 0,
+      "spoken_summary": "Go Youth costs one hundred ten pounds for thirty days. You get twelve gigabytes and one hundred fifty minutes.",
+      "fine_print": [
+        "Only for customers aged sixteen to twenty-five, checked against the national ID.",
+        "On the first renewal after the customer's twenty-sixth birthday, the line moves to Go Smart.",
+        "Unused data does not roll over."
+      ]
+    },
+    {
+      "id": "go_smart", "name": "Go Smart", "category": "prepaid",
+      "price_egp": 130, "price_spoken": "one hundred thirty pounds",
+      "data_gb": 8, "minutes": 300, "validity_days": 30, "speed_mbps": 100, "network": "4G", "rollover_gb": 0,
+      "spoken_summary": "Go Smart costs one hundred thirty pounds for thirty days. You get eight gigabytes and three hundred minutes.",
+      "fine_print": [
+        "Renews automatically from the balance.",
+        "Unused data does not roll over.",
+        "Minutes cover all Egyptian mobile and landline numbers."
+      ]
+    },
+    {
+      "id": "go_plus", "name": "Go Plus", "category": "prepaid",
+      "price_egp": 220, "price_spoken": "two hundred twenty pounds",
+      "data_gb": 20, "minutes": 600, "validity_days": 30, "speed_mbps": 300, "network": "4G and 5G", "rollover_gb": 5,
+      "spoken_summary": "Go Plus costs two hundred twenty pounds for thirty days. You get twenty gigabytes and six hundred minutes.",
+      "fine_print": [
+        "This is the only prepaid plan with rollover. Up to five gigabytes of unused data carries over for one renewal.",
+        "Rollover is lost if the plan does not renew on time.",
+        "Five G works only in the areas listed as five G in the coverage file."
+      ]
+    },
+    {
+      "id": "flex_silver", "name": "Flex Silver", "category": "postpaid",
+      "price_egp": 300, "price_spoken": "three hundred pounds",
+      "data_gb": 30, "minutes": 1000, "validity_days": 30, "speed_mbps": 150, "network": "4G", "rollover_gb": 0,
+      "spoken_summary": "Flex Silver costs three hundred pounds a month. You get thirty gigabytes and one thousand minutes.",
+      "fine_print": [
+        "Unused data does not roll over.",
+        "Data stops at the limit unless Auto Boost is switched on.",
+        "Eligible for device installments after six months with Nabda."
+      ]
+    },
+    {
+      "id": "flex_gold", "name": "Flex Gold", "category": "postpaid",
+      "price_egp": 475, "price_spoken": "four hundred seventy-five pounds",
+      "data_gb": 60, "minutes": 2000, "validity_days": 30, "speed_mbps": 300, "network": "4G and 5G", "rollover_gb": 10,
+      "spoken_summary": "Flex Gold costs four hundred seventy-five pounds a month. You get sixty gigabytes and two thousand minutes.",
+      "fine_print": [
+        "Up to ten gigabytes of unused data carries over for one billing cycle.",
+        "Rollover is lost if the line is barred or suspended on the bill date.",
+        "Five G works only in the areas listed as five G in the coverage file."
+      ]
+    },
+    {
+      "id": "flex_platinum", "name": "Flex Platinum", "category": "postpaid",
+      "price_egp": 800, "price_spoken": "eight hundred pounds",
+      "data_gb": 150, "minutes": 5000, "validity_days": 30, "speed_mbps": 600, "network": "4G and 5G", "rollover_gb": 0,
+      "spoken_summary": "Flex Platinum costs eight hundred pounds a month. You get one hundred fifty gigabytes and five thousand minutes.",
+      "fine_print": [
+        "Includes three free Zone One roaming days each billing cycle. Unused days do not carry over.",
+        "Unused data does not roll over, even though this is the largest plan.",
+        "After the data limit, speed drops to five megabits per second instead of stopping."
+      ]
+    },
+    {
+      "id": "home_fiber_fifty", "name": "Home Fiber Fifty", "category": "home_internet",
+      "price_egp": 450, "price_spoken": "four hundred fifty pounds",
+      "data_gb": 400, "minutes": 0, "validity_days": 30, "speed_mbps": 50, "network": "fiber", "rollover_gb": 0,
+      "spoken_summary": "Home Fiber Fifty costs four hundred fifty pounds a month. You get four hundred gigabytes at speeds up to fifty megabits per second.",
+      "fine_print": [
+        "After the data limit, speed drops to ten megabits per second.",
+        "Installation costs five hundred pounds once, and is free with a twelve-month contract.",
+        "Available only in fiber areas listed in the coverage file."
+      ]
+    },
+    {
+      "id": "home_fiber_two_hundred", "name": "Home Fiber Two Hundred", "category": "home_internet",
+      "price_egp": 850, "price_spoken": "eight hundred fifty pounds",
+      "data_gb": 1000, "minutes": 0, "validity_days": 30, "speed_mbps": 200, "network": "fiber", "rollover_gb": 0,
+      "spoken_summary": "Home Fiber Two Hundred costs eight hundred fifty pounds a month. You get one thousand gigabytes at speeds up to two hundred megabits per second.",
+      "fine_print": [
+        "After the data limit, speed drops to twenty-five megabits per second.",
+        "Installation costs five hundred pounds once, and is free with a twelve-month contract.",
+        "A move up from Home Fiber Fifty takes effect on the next bill date."
+      ]
+    },
+    {
+      "id": "home_air_lite", "name": "Home Air Lite", "category": "home_internet",
+      "price_egp": 350, "price_spoken": "three hundred fifty pounds",
+      "data_gb": 150, "minutes": 0, "validity_days": 30, "speed_mbps": 30, "network": "4G", "rollover_gb": 0,
+      "spoken_summary": "Home Air Lite costs three hundred fifty pounds a month. You get one hundred fifty gigabytes at speeds up to thirty megabits per second.",
+      "fine_print": [
+        "The four G router costs nine hundred pounds once.",
+        "The router works only at the registered address.",
+        "Data stops at the limit. Only Boost Month can be added."
+      ]
+    },
+    {
+      "id": "home_air_pro", "name": "Home Air Pro", "category": "home_internet",
+      "price_egp": 650, "price_spoken": "six hundred fifty pounds",
+      "data_gb": 400, "minutes": 0, "validity_days": 30, "speed_mbps": 300, "network": "5G", "rollover_gb": 0,
+      "spoken_summary": "Home Air Pro costs six hundred fifty pounds a month. You get four hundred gigabytes at speeds up to three hundred megabits per second.",
+      "fine_print": [
+        "The five G router costs one thousand five hundred pounds once.",
+        "Available only at addresses in five G areas. The router falls back to four G when five G is weak.",
+        "Data stops at the limit. Only Boost Month can be added."
+      ]
+    },
+    {
+      "id": "boost_day", "name": "Boost Day", "category": "bundle",
+      "price_egp": 15, "price_spoken": "fifteen pounds",
+      "data_gb": 1, "minutes": 0, "validity_days": 1, "speed_mbps": null, "network": "same as main plan", "rollover_gb": 0,
+      "spoken_summary": "Boost Day costs fifteen pounds for one day. You get one gigabyte.",
+      "fine_print": [
+        "Lasts twenty-four hours from the moment it is bought, not until midnight.",
+        "This is the bundle Auto Boost buys, up to three times per billing cycle."
+      ]
+    },
+    {
+      "id": "boost_week", "name": "Boost Week", "category": "bundle",
+      "price_egp": 50, "price_spoken": "fifty pounds",
+      "data_gb": 5, "minutes": 0, "validity_days": 7, "speed_mbps": null, "network": "same as main plan", "rollover_gb": 0,
+      "spoken_summary": "Boost Week costs fifty pounds for seven days. You get five gigabytes.",
+      "fine_print": [
+        "Does not renew by itself.",
+        "Cannot be used while roaming."
+      ]
+    },
+    {
+      "id": "boost_month", "name": "Boost Month", "category": "bundle",
+      "price_egp": 120, "price_spoken": "one hundred twenty pounds",
+      "data_gb": 15, "minutes": 0, "validity_days": 30, "speed_mbps": null, "network": "same as main plan", "rollover_gb": 5,
+      "spoken_summary": "Boost Month costs one hundred twenty pounds for thirty days. You get fifteen gigabytes.",
+      "fine_print": [
+        "This is the only bundle with rollover. Up to five gigabytes carries over if the same bundle is bought again before it ends.",
+        "This is the only bundle that works on Home Air Lite and Home Air Pro."
+      ]
+    },
+    {
+      "id": "boost_night", "name": "Boost Night", "category": "bundle",
+      "price_egp": 25, "price_spoken": "twenty-five pounds",
+      "data_gb": 10, "minutes": 0, "validity_days": 7, "speed_mbps": null, "network": "same as main plan", "rollover_gb": 0,
+      "spoken_summary": "Boost Night costs twenty-five pounds for seven days. You get ten gigabytes.",
+      "fine_print": [
+        "Works only from one a.m. to seven a.m. Cairo time.",
+        "Outside those hours, data comes from the main plan."
+      ]
+    },
+    {
+      "id": "boost_social", "name": "Boost Social", "category": "bundle",
+      "price_egp": 35, "price_spoken": "thirty-five pounds",
+      "data_gb": 6, "minutes": 0, "validity_days": 30, "speed_mbps": null, "network": "same as main plan", "rollover_gb": 0,
+      "spoken_summary": "Boost Social costs thirty-five pounds for thirty days. You get six gigabytes.",
+      "fine_print": [
+        "Covers only the chat and social apps listed in the Nabda app.",
+        "Voice calls and video calls inside those apps use main plan data."
+      ]
+    },
+    {
+      "id": "boost_talk", "name": "Boost Talk", "category": "bundle",
+      "price_egp": 40, "price_spoken": "forty pounds",
+      "data_gb": 0, "minutes": 200, "validity_days": 30, "speed_mbps": null, "network": "same as main plan", "rollover_gb": 0,
+      "spoken_summary": "Boost Talk costs forty pounds for thirty days. You get two hundred minutes and no data.",
+      "fine_print": [
+        "Minutes cover Egyptian numbers only. International calls are not included.",
+        "Unused minutes end after thirty days."
+      ]
+    }
+  ]
+}

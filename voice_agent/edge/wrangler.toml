@@ -1,0 +1,22 @@
+name = "nabda-voice"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+# Everything goes through the password gate first, including the page's own files.
+[assets]
+directory = "public"
+binding = "ASSETS"
+run_worker_first = true
+
+[vars]
+JEV_MODEL = "jev-1.14.0"
+JEV_MODE = "two_call"
+LLM_MODEL = "qwen/qwen3.8-27b"
+LLM_FALLBACK_MODEL = "openai/gpt-oss-120b"
+CLASSIFIER_MODEL = "openai/gpt-oss-20b"
+STT_MODEL = "whisper-large-v3-turbo"
+TTS_MODEL = "sonic-3.6-2026-08-27"
+TTS_VOICE = "f786b574-daa5-4673-aa0c-cbe3e8534c02"
+THRESHOLD_NEEDS_HUMAN = "0.7"
+THRESHOLD_ANSWERABLE = "0.3"

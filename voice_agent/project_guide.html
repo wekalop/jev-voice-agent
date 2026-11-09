@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jev Voice Guide</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f5f5f2; --surface: #fcfcfb; --surface-2: #efefeb; --text: #151513; --muted: #52514e; --line: #d4d3cd;
+    --accent: #1d5fb4; --accent-soft: #e2edf9; --on-accent: #ffffff;
+    --good: #0f6b45; --good-soft: #dff3e9; --bad: #a32c2b; --bad-soft: #fbe6e5; --warn: #7a5200; --warn-soft: #fbf0d6;
+    --s-stt: #1baf7a; --s-jev: #2a78d6; --s-llm: #eda100; --s-tts: #6250d6; --s-other: #eb6834; --s-wait: #b9b8b0;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121211; --surface: #1a1a19; --surface-2: #262624; --text: #f0efec; --muted: #c3c2b7; --line: #3f3e3a;
+    --accent: #8bbcf3; --accent-soft: #1d3147; --on-accent: #0b1a2b;
+    --good: #72d6a8; --good-soft: #143325; --bad: #f29b9a; --bad-soft: #3e1a19; --warn: #eec871; --warn-soft: #3a2d0d;
+    --s-stt: #199e70; --s-jev: #3987e5; --s-llm: #c98500; --s-tts: #9085e9; --s-other: #d95926; --s-wait: #5b5a55;
+  } }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121211; --surface: #1a1a19; --surface-2: #262624; --text: #f0efec; --muted: #c3c2b7; --line: #3f3e3a;
+    --accent: #8bbcf3; --accent-soft: #1d3147; --on-accent: #0b1a2b;
+    --good: #72d6a8; --good-soft: #143325; --bad: #f29b9a; --bad-soft: #3e1a19; --warn: #eec871; --warn-soft: #3a2d0d;
+    --s-stt: #199e70; --s-jev: #3987e5; --s-llm: #c98500; --s-tts: #9085e9; --s-other: #d95926; --s-wait: #5b5a55;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  code, .mono { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: .9em; font-variant-numeric: tabular-nums; }
+  code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  h1 { font-size: clamp(30px, 6vw, 44px); line-height: 1.12; margin: 0 0 12px; letter-spacing: -.01em; }
+  h2 { font-size: clamp(24px, 4vw, 30px); line-height: 1.2; margin: 0 0 8px; }
+  h3 { font-size: 18px; line-height: 1.3; margin: 0 0 6px; }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 22px; }
+  li { margin-bottom: 4px; }
+  .muted { color: var(--muted); }
+  .small { font-size: 14px; }
+
+  .shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); max-width: 1240px; margin: 0 auto; }
+  nav.side { position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto; padding: 24px 12px 24px 16px; }
+  .nav-title { font-weight: 700; margin: 0 0 2px; }
+  .progress-text { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .progress { height: 6px; background: var(--surface-2); border-radius: 3px; margin-bottom: 14px; overflow: hidden; }
+  .progress i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .25s; }
+  nav.side a { display: flex; gap: 8px; align-items: center; min-height: 36px; padding: 4px 10px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 15px; line-height: 1.25; }
+  nav.side a:hover { background: var(--surface-2); color: var(--text); }
+  nav.side a.current { background: var(--accent-soft); color: var(--text); font-weight: 600; }
+  nav.side a .tick { width: 14px; flex: none; color: var(--good); font-size: 13px; }
+  .theme { margin-top: 12px; min-height: 44px; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+  main { padding: 24px 16px 80px; min-width: 0; }
+  section { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: clamp(18px, 3vw, 32px); margin-bottom: 20px; }
+  .kicker { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+  .lead { font-size: 18px; color: var(--muted); max-width: 70ch; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin: 14px 0; }
+  .card { background: var(--surface-2); border-radius: 10px; padding: 14px; min-width: 0; }
+  .card h3 { font-size: 16px; }
+  .stat { font-size: 30px; font-weight: 600; line-height: 1.15; }
+  .note { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 14px 0; }
+  .note.warn { border-color: var(--warn); background: var(--warn-soft); }
+  .note p:last-child { margin: 0; }
+
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+  .tab { min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); line-height: 1.25; transition: background-color .15s; text-align: left; }
+  .tab:hover { background: var(--surface-2); }
+  .tab[aria-pressed="true"], .tab[aria-selected="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 600; }
+  .primary { min-height: 44px; padding: 8px 18px; border: 0; border-radius: 8px; background: var(--accent); color: var(--on-accent); font-weight: 600; }
+  .primary:disabled { opacity: .5; cursor: default; }
+  .ghost { min-height: 44px; padding: 8px 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  .panel { background: var(--surface-2); border-radius: 10px; padding: 16px; min-width: 0; }
+
+  .pipe { display: flex; flex-wrap: wrap; gap: 6px; align-items: stretch; margin: 16px 0; }
+  .pipe button { flex: 1 1 110px; min-height: 76px; padding: 8px; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); text-align: center; line-height: 1.25; }
+  .pipe button strong { display: block; font-size: 15px; }
+  .pipe button span { display: block; font-size: 13px; color: var(--muted); }
+  .pipe button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+
+  .scenario-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+  .said { background: var(--good-soft); padding: 10px 14px; border-radius: 10px; margin-bottom: 10px; }
+  .said small, .reply small { display: block; color: var(--muted); font-size: 13px; }
+  .reply { background: var(--accent-soft); padding: 10px 14px; border-radius: 10px; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .steps li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; padding: 8px 10px; border-radius: 8px; color: var(--muted); margin: 0; }
+  .steps li .n { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); font-size: 13px; }
+  .steps li.done { color: var(--text); }
+  .steps li.done .n { background: var(--good-soft); border-color: var(--good); }
+  .steps li.now { background: var(--surface); color: var(--text); outline: 2px solid var(--accent); }
+  .steps li.now .n { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+  .steps li.later .detail, .steps li.done .detail { display: none; }
+  .detail { font-size: 14px; margin-top: 4px; }
+  .detail code { background: var(--surface-2); }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+
+  .lane { display: flex; height: 34px; gap: 2px; margin: 4px 0; min-width: 0; }
+  .lane > span { display: flex; align-items: center; padding: 0 6px; border-radius: 4px; font-size: 12px; color: #fff; white-space: nowrap; overflow: hidden; }
+  .lane-label { font-size: 13px; color: var(--muted); margin-top: 8px; }
+  .c-jev { background: var(--s-jev); } .c-llm { background: var(--s-llm); color: #1a1200 !important; } .c-gate { background: var(--s-jev); opacity: .78; } .c-stt { background: var(--s-stt); color: #03251a !important; } .c-tts { background: var(--s-tts); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .c-tts { color: #160f3a !important; } }
+  :root[data-theme="dark"] .c-tts { color: #160f3a !important; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .file { padding: 6px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+  .file.on { background: var(--good-soft); border-color: var(--good); color: var(--text); font-weight: 600; }
+
+  .states { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin: 14px 0; }
+  .states button { min-height: 72px; padding: 10px; text-align: left; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); line-height: 1.3; }
+  .states button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+
+  label.slider { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; margin-bottom: 12px; }
+  label.slider input { grid-column: 1 / -1; width: 100%; min-height: 28px; accent-color: var(--accent); }
+  .big-label { font-size: 22px; font-weight: 600; }
+
+  .bars { display: grid; gap: 4px; }
+  .bar-group { margin-bottom: 10px; }
+  .bar-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .bar-row { display: grid; grid-template-columns: 112px minmax(0, 1fr) 58px; gap: 8px; align-items: center; font-size: 13px; }
+  .bar-track { height: 14px; position: relative; }
+  .bar-fill { display: block; height: 100%; border-radius: 0 4px 4px 0; min-width: 2px; }
+  .bar-value { text-align: right; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; margin: 8px 0; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+  .stack { display: flex; height: 24px; gap: 2px; margin: 10px 0; }
+  .stack span { display: block; min-width: 2px; }
+  .stack span:last-child { border-radius: 0 4px 4px 0; }
+  .table-wrap { overflow-x: auto; margin: 10px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .timeline { list-style: none; padding: 0; margin: 12px 0; }
+  .timeline li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 16px; padding: 10px 0; border-bottom: 1px solid var(--line); margin: 0; }
+  .timeline li strong { display: block; font-size: 13px; color: var(--muted); font-weight: 600; }
+
+  .tree button { display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr); gap: 10px; width: 100%; min-height: 44px; padding: 8px 10px; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; align-items: center; }
+  .tree button:hover { background: var(--surface-2); }
+  .tree button .path { font-family: ui-monospace, Consolas, monospace; font-size: 14px; overflow-wrap: anywhere; }
+  .tree button .what { font-size: 14px; color: var(--muted); }
+  .tree .more { padding: 10px 12px; background: var(--surface-2); font-size: 15px; }
+
+  details { border-bottom: 1px solid var(--line); }
+  details summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; padding: 8px 0; }
+  details > div { padding: 0 0 12px; }
+  .script { font-size: 17px; line-height: 1.7; max-width: 72ch; }
+  .check-list { list-style: none; padding: 0; }
+  .check-list li { display: flex; gap: 10px; padding: 6px 0; }
+  .check-list input { width: 20px; height: 20px; flex: none; margin-top: 3px; accent-color: var(--accent); }
+
+  .quiz-q { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .quiz-q p { font-weight: 600; }
+  .quiz-q button { display: block; width: 100%; min-height: 44px; margin-top: 6px; padding: 8px 12px; text-align: left; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); line-height: 1.35; }
+  .quiz-q button:hover:not(:disabled) { background: var(--surface-2); }
+  .quiz-q button:disabled { cursor: default; color: var(--text); }
+  .quiz-q button.right { background: var(--good-soft); border-color: var(--good); }
+  .quiz-q button.wrong { background: var(--bad-soft); border-color: var(--bad); }
+  .why { margin-top: 8px; font-size: 15px; }
+  .score { font-size: 20px; font-weight: 600; }
+
+  @media (max-width: 860px) {
+    .shell { display: block; }
+    nav.side { position: sticky; top: 0; z-index: 20; height: auto; background: var(--bg); padding: 10px 16px; border-bottom: 1px solid var(--line); }
+    .nav-title, .progress-text, .theme { display: none; }
+    .progress { margin-bottom: 8px; }
+    .nav-links { display: flex; gap: 4px; overflow-x: auto; }
+    nav.side a { flex: none; font-size: 14px; }
+    nav.side a .tick { display: none; }
+    html { scroll-padding-top: 90px; }
+    .scenario-layout { grid-template-columns: minmax(0, 1fr); }
+    .timeline li { grid-template-columns: minmax(0, 1fr); }
+    .tree button { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    .bar-row { grid-template-columns: 92px minmax(0, 1fr) 54px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="side" aria-label="Sections">
+    <p class="nav-title">Jev voice agent</p>
+    <div class="progress-text" id="progressText">0 of 12 sections read</div>
+    <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+    <div class="nav-links" id="navLinks"></div>
+    <button class="theme" id="theme" type="button">Switch light or dark</button>
+  </nav>
+
+  <main>
+    <section id="big-picture" data-title="The big picture">
+      <div class="kicker">1. The big picture</div>
+      <h1>A voice agent that tests how fast and how right Jev really is</h1>
+      <p class="lead">You call a fictional Egyptian telecom from your browser and talk to an AI customer-service agent. Behind that call, every step is timed, so you can test a vendor's speed claim instead of trusting it.</p>
+      <div class="cards">
+        <div class="card"><h3>The question</h3><p class="small">Can a fast decision model like Jev make a voice agent quicker, safer, and still accurate?</p></div>
+        <div class="card"><h3>The product</h3><p class="small">A working voice agent for Nabda, an invented company with plans, policies, customers, and outages.</p></div>
+        <div class="card"><h3>The test</h3><p class="small">100 labeled questions and real calls measure both speed and accuracy, and compare Jev with a small LLM.</p></div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="stat mono">190 ms</div><div class="small muted">Jev's median routing decision, measured from Cairo</div></div>
+        <div class="card"><div class="stat mono">484 ms</div><div class="small muted">The LLM classifier's median on the same questions</div></div>
+        <div class="card"><div class="stat mono">~1.7 s</div><div class="small muted">End of speech to first audio on real calls (a small sample)</div></div>
+        <div class="card"><div class="stat mono">$0.0002</div><div class="small muted">About what Jev costs per turn in two-call mode</div></div>
+      </div>
+      <div class="note"><p><strong>The one sentence to remember:</strong> Jev decides, the LLM talks. Jev picks what kind of request this is and what knowledge is needed, then the LLM writes the spoken answer from only that knowledge.</p></div>
+    </section>
+
+    <section id="jev" data-title="What Jev is">
+      <div class="kicker">2. What Jev is</div>
+      <h2>Jev answers questions with typed decisions, not text</h2>
+      <p>A normal LLM writes sentences. Jev is a "System One" model from TypeSafe: you give it a state and typed questions, and it returns structured answers with probabilities. It can't write the spoken reply, so it has to work alongside an LLM.</p>
+      <div class="tabs" id="jevTabs"></div>
+      <div class="panel" id="jevPanel"></div>
+      <h3 style="margin-top:18px">Compare the two kinds of model</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>&nbsp;</th><th>Jev (decision model)</th><th>LLM (Qwen here)</th></tr></thead>
+        <tbody>
+          <tr><td>Output</td><td>A choice, a score, or a yes probability</td><td>Free text</td></tr>
+          <tr><td>Job in this project</td><td>Intent, mood, urgency, needs a human, answerable</td><td>The spoken reply</td></tr>
+          <tr><td>Can it give a wrong answer?</td><td>Yes. It always returns a valid option, but it may be the wrong one</td><td>Yes. It can also invent facts</td></tr>
+          <tr><td>Cost</td><td>About $0.042 per million input tokens, output free</td><td>Groq free tier here, with rate limits</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="pipeline" data-title="The pipeline">
+      <div class="kicker">3. The pipeline</div>
+      <h2>From your voice to the agent's voice</h2>
+      <p>Click each stage. Only the voice detector runs on your machine. Speech to text, Jev, the LLM, and the voice all run in the cloud.</p>
+      <div class="pipe" id="pipe"></div>
+      <div class="panel" id="pipeDetail"></div>
+      <div class="note"><p><strong>Why streaming matters:</strong> the agent doesn't wait for the full reply. As soon as the first complete sentence is ready, it goes to the voice, so you hear audio while the rest is still being written.</p></div>
+    </section>
+
+    <section id="turn" data-title="Walk through a turn">
+      <div class="kicker">4. Walk through a turn</div>
+      <h2>Follow one question through the code</h2>
+      <p>Pick a situation, then press Next step. The replies are real ones from test conversations. The Jev values are examples of what it returns.</p>
+      <div class="tabs" id="scenarioTabs"></div>
+      <div class="scenario-layout">
+        <div>
+          <div class="said"><small>Caller says</small><span id="scenarioSaid"></span></div>
+          <div class="reply" id="scenarioReplyBox" hidden><small>Agent says</small><span id="scenarioReply"></span></div>
+          <div class="row">
+            <button class="primary" id="stepNext" type="button">Next step</button>
+            <button class="ghost" id="stepReset" type="button">Start over</button>
+          </div>
+          <p class="note" id="scenarioLesson" hidden></p>
+        </div>
+        <ol class="steps" id="scenarioSteps" aria-live="polite"></ol>
+      </div>
+    </section>
+
+    <section id="modes" data-title="Three Jev modes">
+      <div class="kicker">5. Three Jev modes</div>
+      <h2>The hard design problem: order of operations</h2>
+      <p>To ask "can the knowledge base answer this?", Jev needs to see the knowledge. But the knowledge is chosen from the intent, which Jev also decides. So which comes first? The project has three modes to test the answer, chosen with <code>JEV_MODE</code>.</p>
+      <div class="tabs" id="modeTabs"></div>
+      <div class="panel" id="modePanel"></div>
+      <p class="small muted" style="margin-top:10px">The bars show the order of steps and aren't drawn to scale. The live agent uses <code>two_call</code>. A full-turn comparison of the modes was stopped early, so only the numbers shown here are measured.</p>
+    </section>
+
+    <section id="routing" data-title="Knowledge routing">
+      <div class="kicker">6. Knowledge routing</div>
+      <h2>Jev's decision chooses what the LLM can see</h2>
+      <p>Pasting the whole company into every prompt would be slow and would burn the free-tier token limit. Instead, the intent picks the files. Click an intent.</p>
+      <div class="tabs" id="intentTabs"></div>
+      <div class="panel">
+        <p id="intentWhat"></p>
+        <div class="chips" id="fileChips"></div>
+      </div>
+      <h3 style="margin-top:18px">Rules that make routing work on a real call</h3>
+      <ul>
+        <li><strong>Always included:</strong> <code>support_policy.md</code>, because the rules apply to every reply.</li>
+        <li><strong>At most two knowledge files:</strong> this keeps prompts small enough for the free tier.</li>
+        <li><strong>Two topics in one question:</strong> a <code>second_topic</code> decision loads the main file for each.</li>
+        <li><strong>Follow-ups:</strong> "and the night one?" reuses the last answer's file when intent is unclear.</li>
+        <li><strong>Shorter plans file:</strong> replies use a trimmed version without repeated fields.</li>
+      </ul>
+    </section>
+
+    <section id="safety" data-title="Identity and safety">
+      <div class="kicker">7. Identity and safety</div>
+      <h2>The most important safety choice is in the code, not the prompt</h2>
+      <p>A prompt can be talked around. So a customer's record is simply not given to the LLM until the code has checked the caller's details. With no data in the prompt, there is nothing to leak. Click each stage.</p>
+      <div class="states" id="identityStates"></div>
+      <div class="panel" id="identityDetail"></div>
+      <h3 style="margin-top:18px">Who does what</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Part</th><th>Its job</th><th>Can a caller trick it into passing a check?</th></tr></thead>
+        <tbody>
+          <tr><td>Small LLM (<code>gpt-oss-20b</code>)</td><td>Pulls the phone number, name, and digits out of speech</td><td>Its output only feeds the comparison below</td></tr>
+          <tr><td>Python code (<code>identity.py</code>)</td><td>Compares those details with the record</td><td>No. The details have to match</td></tr>
+          <tr><td>Reply LLM (Qwen)</td><td>Writes the answer, and follows <code>support_policy.md</code></td><td>It never sees the identity details</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="voice" data-title="Voice cues">
+      <div class="kicker">8. Voice cues</div>
+      <h2>Giving a text-only model a sense of tone</h2>
+      <p>Whisper turns speech into words and throws away how you sounded, and Jev can't take audio. So the code measures loudness, pitch, and speed, compares them with earlier in the call, and hands Jev a sentence. Move the sliders: they use the same thresholds as <code>agent/voice_cues.py</code>.</p>
+      <div class="scenario-layout">
+        <div class="panel">
+          <label class="slider"><span>Loudness change</span><span class="mono" id="vLoudText"></span><input id="vLoud" type="range" min="-10" max="10" step="1" value="0"></label>
+          <label class="slider"><span>Pitch change</span><span class="mono" id="vPitchText"></span><input id="vPitch" type="range" min="-6" max="6" step="1" value="0"></label>
+          <label class="slider"><span>Speaking speed change</span><span class="mono" id="vRateText"></span><input id="vRate" type="range" min="-50" max="50" step="5" value="0"></label>
+        </div>
+        <div class="panel">
+          <div class="small muted">Shown on the call page as</div>
+          <div class="big-label" id="vLabel"></div>
+          <div class="small muted" style="margin-top:10px">Sent to Jev and the reply model as</div>
+          <p class="small" id="vSentence"></p>
+        </div>
+      </div>
+      <h3 style="margin-top:18px">What it did to real Jev</h3>
+      <p class="small muted">Made-up "louder, higher, faster" cues sent to real Jev. These test Jev's reaction, not the measurement.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Words</th><th>No cue</th><th>Heated cue</th></tr></thead>
+        <tbody>
+          <tr><td>"Fine. Whatever. Thanks a lot."</td><td>Annoyed, low urgency, 9% angry</td><td>Annoyed, medium urgency, 38% angry</td></tr>
+          <tr><td>"How much is the Go Smart plan?"</td><td>Calm, low urgency</td><td>Annoyed, low urgency</td></tr>
+          <tr><td>"This is ridiculous, I want my money back!"</td><td>Angry, medium urgency</td><td>Angry, medium urgency</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note warn"><p><strong>Be honest about this feature:</strong> it detects change, not emotion. Excitement or a noisy room can look like anger, the first turn has nothing to compare with, and it hasn't been proven on real angry speech yet.</p></div>
+    </section>
+
+    <section id="timing" data-title="Timing">
+      <div class="kicker">9. Timing</div>
+      <h2>Where the time goes in one turn</h2>
+      <p>These come from your real calls, measured from the moment the voice detector ends your turn.</p>
+      <div class="stack" id="timingStack" role="img" aria-label="Stacked bar of time per stage"></div>
+      <div class="legend" id="timingLegend"></div>
+      <div class="row"><label style="display:flex;gap:8px;align-items:center;min-height:44px"><input type="checkbox" id="vadToggle" style="width:20px;height:20px;accent-color:var(--accent)"> Include the half-second silence wait the caller also feels</label></div>
+      <div class="cards">
+        <div class="card"><div class="stat mono" id="timingTotal"></div><div class="small muted" id="timingTotalLabel"></div></div>
+        <div class="card"><h3>Jev's real share</h3><p class="small">A routing call took a median of 191 ms on live calls, and the second call 223 ms. Jev is fast, but it isn't the only stage on the path.</p></div>
+        <div class="card"><h3>The vendor's claim</h3><p class="small">TypeSafe's reported 70 to 500 ms. A single call here: median 190 ms, p95 227 ms, in range from Cairo. Two calls in a row take about 400 ms.</p></div>
+      </div>
+      <p class="small muted">Stage sizes are differences between medians from 9 to 16 turns, across versions of the agent, so they're a rough picture and not a benchmark. Your brief asked for 20 or more runs.</p>
+      <h3 style="margin-top:14px">What's on the critical path</h3>
+      <p>Each stage needs the one before it, so speech to text, Jev, the LLM, and the voice run in sequence. Parallel work is used where it's safe: all routing questions go in one Jev request, which answers them together, and logging stays out of the way.</p>
+    </section>
+
+    <section id="results" data-title="Results">
+      <div class="kicker">10. Results</div>
+      <h2>Jev against a small LLM on 100 questions</h2>
+      <p>Both answered the same labeled questions, one at a time. The first call of each is excluded from latency as a cold start.</p>
+      <h3>Latency in milliseconds</h3>
+      <div class="legend"><span><i class="swatch" style="background:var(--s-jev)"></i>Jev routing call</span><span><i class="swatch" style="background:var(--s-other)"></i>gpt-oss-20b classifier</span></div>
+      <div id="latencyChart"></div>
+      <h3 style="margin-top:16px">Accuracy per field</h3>
+      <div class="tabs" id="accuracyTabs"></div>
+      <div class="legend" id="accuracyLegend"></div>
+      <div id="accuracyChart"></div>
+      <div class="note"><p id="accuracyNote"></p></div>
+      <h3>Where they disagreed (Jev two-call and the classifier)</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Field</th><th class="num">Only Jev right</th><th class="num">Only LLM right</th><th class="num">Both right</th><th class="num">Both wrong</th></tr></thead>
+        <tbody>
+          <tr><td>intent</td><td class="num">11</td><td class="num">5</td><td class="num">68</td><td class="num">16</td></tr>
+          <tr><td>needs_human</td><td class="num">5</td><td class="num">3</td><td class="num">88</td><td class="num">4</td></tr>
+          <tr><td>answerable_from_kb</td><td class="num">22</td><td class="num">2</td><td class="num">75</td><td class="num">1</td></tr>
+          <tr><td>sentiment</td><td class="num">10</td><td class="num">18</td><td class="num">60</td><td class="num">12</td></tr>
+          <tr><td>urgency</td><td class="num">12</td><td class="num">8</td><td class="num">71</td><td class="num">9</td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:14px">How to read these fairly</h3>
+      <ul>
+        <li><strong>The clear win is speed and consistency.</strong> Jev's p95 stayed near its median, while the classifier's p95 reached 1,504 ms.</li>
+        <li><strong>The answerable gap isn't a fair fight.</strong> In two-call mode, Jev saw the real knowledge file and the classifier only saw a topic list. With the same topic list, Jev scored 90%, against 77%.</li>
+        <li><strong>Sentiment went to the classifier.</strong> Jev often read polite "um" and "like" as confused, though some of those labels are debatable.</li>
+        <li><strong>Small differences may be noise.</strong> Jev's intent score moved between 79% and 85% between setups.</li>
+      </ul>
+      <div class="note warn"><p><strong>Limits to say out loud:</strong> Claude Code generated the company data and the labels together, so the labels aren't independent. The test ran before later changes to routing and account checks. The full-turn benchmark was stopped at 2 of 25 turns, so there's no median or p95 for end-to-end speed from replay, and no final-answer pass rate.</p></div>
+    </section>
+
+    <section id="story" data-title="What changed and why">
+      <div class="kicker">11. What changed and why</div>
+      <h2>Real calls found what the tests missed</h2>
+      <p>These are good stories to tell, because they show how the project improved through testing.</p>
+      <ul class="timeline" id="storyList"></ul>
+      <h3>Where to find things in the code</h3>
+      <p class="small muted">Click a row for details.</p>
+      <div class="tree" id="codeTree"></div>
+    </section>
+
+    <section id="explain" data-title="Explain it yourself">
+      <div class="kicker">12. Explain it yourself</div>
+      <h2>Your scripts, likely questions, and a quiz</h2>
+      <div class="tabs" id="scriptTabs"></div>
+      <div class="panel"><div class="script" id="scriptText"></div></div>
+
+      <h3 style="margin-top:22px">Questions people will probably ask</h3>
+      <div id="qaList"></div>
+
+      <h3 style="margin-top:22px">What isn't finished</h3>
+      <ul>
+        <li>End-to-end median and p95 over 20 or more runs.</li>
+        <li>A full-turn comparison of the three Jev modes.</li>
+        <li>A score for final answers, and rerunning accuracy on the current version.</li>
+        <li>Testing voice cues and interruptions on purpose with real speech.</li>
+        <li>The optional Cerebras and Gemini Live comparisons.</li>
+        <li>Real actions: the agent explains the next step but can't block a line or change a plan.</li>
+      </ul>
+
+      <h3 style="margin-top:22px">Test yourself</h3>
+      <p class="score" id="quizScore" aria-live="polite"></p>
+      <div id="quiz"></div>
+      <div class="row"><button class="ghost" id="quizReset" type="button">Try the quiz again</button></div>
+
+      <h3 style="margin-top:22px">Ready to present?</h3>
+      <ul class="check-list" id="readyList"></ul>
+    </section>
+  </main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const el = (tag, props = {}, ...children) => {
+  const node = document.createElement(tag);
+  Object.entries(props).forEach(([key, value]) => {
+    if (key === 'class') node.className = value;
+    else if (key === 'html') node.innerHTML = value;
+    else if (key.startsWith('on')) node.addEventListener(key.slice(2), value);
+    else node.setAttribute(key, value);
+  });
+  children.forEach(child => node.append(child));
+  return node;
+};
+
+function makeTabs(containerId, items, onPick, initial = 0) {
+  const box = $(containerId);
+  const buttons = items.map((item, index) => el('button', {
+    class: 'tab', type: 'button', 'aria-pressed': 'false',
+    onclick: () => pick(index),
+  }, item.label));
+  function pick(index) {
+    buttons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
+    onPick(items[index], index);
+  }
+  box.replaceChildren(...buttons);
+  pick(initial);
+}
+
+// Jev question types
+const JEV_TYPES = [
+  { label: 'Choice: pick one', text: 'Picks one option from a set you define, and gives a probability for each. Used here for <strong>intent</strong>, <strong>sentiment</strong>, and <strong>second_topic</strong>.',
+    req: `"intent": {
+  "type": "choice",
+  "instructions": "What is the main intent of the customer's latest message?",
+  "criteria": { "billing": "Bills, charges...", "roaming": "Using the phone abroad..." }
+}`, res: `"intent": { "type": "choice", "choice": "roaming", "confidence": 0.93, "probabilities": { ... } }` },
+  { label: 'Score: rate on a scale', text: 'Rates something on an ordered scale of up to 10 levels. Used here for <strong>urgency</strong>: low, medium, high.',
+    req: `"urgency": {
+  "type": "score",
+  "instructions": "How urgent is the customer's latest message?",
+  "criteria": ["Low: a general question...", "Medium: a current problem...", "High: needs action now..."]
+}`, res: `"urgency": { "type": "score", "score": 1.43, "confidence": 0.35, "probabilities": { ... } }` },
+  { label: 'Noul: yes or no', text: 'Gives one number from 0 to 1: the probability of yes. Your code sets the threshold. Used for <strong>needs_human</strong> (0.7), <strong>answerable_from_kb</strong> (0.3), and the account checks (0.5).',
+    req: `"needs_human": {
+  "type": "noul",
+  "instructions": "Does the customer's latest message need a human agent?",
+  "criteria": { "true": "The caller asks for a person; suspected fraud...", "false": "A virtual assistant can handle it..." }
+}`, res: `"needs_human": { "type": "noul", "noul": 0.12 }` },
+];
+makeTabs('jevTabs', JEV_TYPES, item => {
+  $('jevPanel').replaceChildren(
+    el('p', { html: item.text }),
+    el('div', { class: 'small muted' }, 'Question sent, from agent/decisions.py (shortened)'),
+    el('pre', { style: 'overflow-x:auto;margin:4px 0 12px;font-size:13px' }, el('code', {}, item.req)),
+    el('div', { class: 'small muted' }, 'Answer returned (example)'),
+    el('pre', { style: 'overflow-x:auto;margin:4px 0 0;font-size:13px' }, el('code', {}, item.res)),
+  );
+});
+
+// Pipeline
+const STAGES = [
+  { name: 'Your mic', sub: 'Browser', what: 'The call page captures your microphone and sends it to the local server over WebRTC.', tool: 'WebRTC, through Pipecat', code: 'live/index.html, live/server.py', why: 'WebRTC is built for live audio. No phone number is needed.' },
+  { name: 'Voice detector', sub: 'Silero, local', what: 'Spots when you start and stop talking. Half a second of silence ends your turn. If you start talking while the agent speaks, it cancels the reply.', tool: 'Silero VAD, a small model on your machine', code: 'live/server.py', why: 'This is the one local model. It needs to react instantly, and it starts the timer for each turn.' },
+  { name: 'Voice cues', sub: 'Signal maths', what: 'Measures loudness, pitch, and speed from the audio, and compares them with earlier in the call.', tool: 'NumPy, no AI model', code: 'agent/voice_cues.py', why: 'Speech to text discards tone, so it has to be measured before it is lost. It took about 18 ms for 8 seconds of audio.' },
+  { name: 'Speech to text', sub: 'Groq Whisper', what: 'Turns your speech into words. It gets a short hint with names like Nabda and Go Smart, so they are heard correctly.', tool: 'whisper-large-v3-turbo', code: 'live/factory.py', why: 'Fast and on a free tier. Live median about 470 ms.' },
+  { name: 'Jev', sub: 'Decisions', what: 'Answers typed questions: intent, sentiment, urgency, needs a human, needs the account, second topic, and whether it asks about someone else. A second call asks whether the knowledge can answer it.', tool: 'jev-1.14.0, through TypeSafe', code: 'agent/decisions.py, agent/jev.py', why: 'The part being tested. It is the agent\'s fast decision layer.' },
+  { name: 'Gates', sub: 'Your code', what: 'Uses those decisions: load the right files, ask for ID, refuse someone else\'s details, hand off, or decline.', tool: 'Plain Python', code: 'agent/turn.py, agent/kb.py, agent/identity.py', why: 'Decisions only matter if code acts on them. Rules live here so a caller can\'t argue past them.' },
+  { name: 'LLM', sub: 'Groq Qwen', what: 'Writes one or two spoken sentences using only the chosen knowledge, and streams them as they are written.', tool: 'qwen/qwen3.8-27b with reasoning off. Fallback: gpt-oss-120b', code: 'agent/prompts.py, agent/providers/llm.py', why: 'The Llama models in the original brief were shut down by Groq in August 2026. Reasoning is off so there is no thinking delay.' },
+  { name: 'Voice', sub: 'Cartesia', what: 'Turns the first complete sentence into audio right away, then the rest.', tool: 'sonic-3.6-2026-08-27', code: 'live/factory.py, agent/providers/tts.py', why: 'Reported to be fast, with a free tier. First audio took about 169 ms in a key check.' },
+  { name: 'Your speaker', sub: 'Browser', what: 'Plays the audio. The moment the first audio leaves Cartesia ends the turn\'s timing, and the row is logged.', tool: 'WebRTC', code: 'live/processors.py, agent/timing.py', why: 'Every turn writes one line to results/turns_live.jsonl.' },
+];
+const pipeButtons = STAGES.map((stage, index) => el('button', { type: 'button', 'aria-pressed': 'false', onclick: () => pickStage(index) },
+  el('strong', {}, stage.name), el('span', {}, stage.sub)));
+$('pipe').replaceChildren(...pipeButtons);
+function pickStage(index) {
+  pipeButtons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
+  const stage = STAGES[index];
+  $('pipeDetail').replaceChildren(
+    el('h3', {}, stage.name),
+    el('p', {}, stage.what),
+    el('p', { class: 'small', html: '<strong>Uses:</strong> ' + stage.tool }),
+    el('p', { class: 'small', html: '<strong>Why:</strong> ' + stage.why }),
+    el('p', { class: 'small', style: 'margin:0', html: '<strong>Code:</strong> <code>' + stage.code + '</code>' }),
+  );
+}
+pickStage(4);
+
+// Scenarios
+const SCENARIOS = [
+  { label: 'A plan question', said: 'How much is the Go Smart plan?', reply: 'Go Smart costs one hundred thirty pounds for thirty days. You get eight gigabytes and three hundred minutes.',
+    lesson: 'This is the normal path. Jev picks the files, confirms they can answer, and the LLM speaks.',
+    steps: [
+      ['Your turn ends', 'The voice detector hears half a second of silence and starts the clock.', 'live/processors.py'],
+      ['Speech becomes text', 'Whisper returns the words.', 'live/factory.py'],
+      ['Jev routes it', 'Intent <code>plan_info</code>, sentiment calm, urgency low, needs_human 0.2, needs account 0.1.', 'agent/decisions.py'],
+      ['Files are chosen', '<code>plan_info</code> loads <code>plans.md</code> and <code>overview.md</code>.', 'agent/kb.py'],
+      ['Jev checks the knowledge', 'With those files in its state, answerable comes back 0.99. That passes the 0.3 threshold.', 'agent/turn.py'],
+      ['The LLM writes', 'The prompt has the style rules, support policy, and those two files. No customer data.', 'agent/prompts.py'],
+      ['First audio', 'The first sentence goes to Cartesia straight away, and the timing row is saved.', 'live/processors.py'],
+    ] },
+  { label: 'Check my balance', said: '"What\'s my balance?", then "My number is 01995550101, I\'m Mona Adel, the last four digits are 4471."', reply: 'Your balance is forty-two pounds fifty.',
+    lesson: 'The LLM only gets the customer\'s record once the Python check has passed.',
+    steps: [
+      ['Jev spots an account question', 'Intent <code>account_lookup</code>, needs account 0.95.', 'agent/decisions.py'],
+      ['The gate stops it', 'Level 0 is below the level 1 needed. The question is saved, and a fixed line asks for ID, with no LLM involved.', 'agent/turn.py'],
+      ['The caller answers', 'Reading details runs only during a check. A small LLM turns speech into phone, name, and digits.', 'agent/identity.py'],
+      ['Code compares', 'Phone must match exactly, last four must match exactly, and name must be close, to allow for mishearing.', 'agent/identity.py'],
+      ['The saved question returns', 'Jev decides on "What\'s my balance?", not on the digits.', 'agent/turn.py'],
+      ['The record goes in', 'The prompt now includes the record, with national ID digits and birth date removed.', 'agent/kb.py'],
+      ['The LLM answers', 'It reads the balance from the record, in words.', 'agent/prompts.py'],
+    ] },
+  { label: 'Not in the knowledge', said: "Who's your CEO?", reply: "I don't have that information. I can help with plans, billing, or connect you to a human agent if you'd like.",
+    lesson: 'The answerable gate stops the model from inventing an answer. Removing the knowledge from the prompt gives it nothing to invent from.',
+    steps: [
+      ['Jev routes it', 'Intent <code>out_of_scope</code>, so no specific files.', 'agent/decisions.py'],
+      ['Jev checks the knowledge', 'Answerable comes back below 0.3.', 'agent/turn.py'],
+      ['The gate fails', 'The reply path becomes <code>decline</code>.', 'agent/turn.py'],
+      ['The LLM writes a decline', 'It gets no knowledge files, and is told to say it doesn\'t know or to ask what you meant. So the decline fits what you said.', 'agent/prompts.py'],
+    ] },
+  { label: 'Asks for a person', said: 'Can I talk to a real person?', reply: "Of course. I can't transfer calls from this test line, but our human agents are available from eight a.m. to midnight. Just dial one five five, or oh two, five five five zero, oh one five five.",
+    lesson: 'A fixed line is the fastest and most reliable answer here, so the LLM isn\'t used at all.',
+    steps: [
+      ['Jev routes it', 'Intent <code>human_request</code>.', 'agent/decisions.py'],
+      ['Straight answer', 'A fixed line gets it to the voice with no ID check, knowledge, or LLM.', 'agent/prompts.py'],
+    ] },
+  { label: "Someone else's account", said: "I'm calling for my wife Salma Fathy, what's her balance?", reply: 'I can only share account details with the person whose name is on the line. Salma would need to call herself, or you can visit a store with a formal power of attorney.',
+    lesson: 'An early version asked this caller for ID, and could have read the wife\'s name as theirs. Now it refuses before any check starts.',
+    steps: [
+      ['Jev flags it', '<code>about_another_person</code> comes back high.', 'agent/decisions.py'],
+      ['Checks are skipped', 'No ID is asked for, and the words aren\'t read as identity.', 'agent/turn.py'],
+      ['Data is withheld', 'Even a verified caller\'s own record is left out for this turn.', 'agent/turn.py'],
+      ['The LLM refuses kindly', 'It explains the rule, and doesn\'t confirm the person is a customer.', 'agent/prompts.py'],
+    ] },
+  { label: 'Two questions at once', said: 'How much is the Boost Week bundle, and is there a problem in Sidi Gaber?', reply: 'Boost Week is fifty pounds for seven days, with five gigabytes. Yes, mobile data is slow in Sidi Gaber due to equipment work, and we expect it fixed by one p.m. today.',
+    lesson: 'Before second_topic existed, the agent only loaded the plans file and had to ask about the outage.',
+    steps: [
+      ['Jev routes it', 'Intent <code>plan_info</code>, and <code>second_topic</code> is <code>coverage_outage</code>.', 'agent/decisions.py'],
+      ['Both main files load', 'The file limit is two, so each topic gets its main file: <code>plans.md</code> and <code>coverage_and_outages.md</code>.', 'agent/kb.py'],
+      ['Jev checks the knowledge', 'Answerable comes back high.', 'agent/turn.py'],
+      ['The LLM answers both', 'The prompt tells it to answer both questions.', 'agent/prompts.py'],
+    ] },
+];
+let scenario = SCENARIOS[0], stepIndex = -1;
+function renderSteps() {
+  const items = scenario.steps.map((step, index) => {
+    const state = index < stepIndex ? 'done' : index === stepIndex ? 'now' : 'later';
+    return el('li', { class: state },
+      el('span', { class: 'n' }, String(index + 1)),
+      el('div', {}, el('strong', {}, step[0]),
+        el('div', { class: 'detail', html: step[1] + '<br><code>' + step[2] + '</code>' })));
+  });
+  $('scenarioSteps').replaceChildren(...items);
+  const finished = stepIndex >= scenario.steps.length - 1;
+  $('scenarioReplyBox').hidden = !finished;
+  $('scenarioLesson').hidden = !finished;
+  $('stepNext').disabled = finished;
+  $('stepNext').textContent = stepIndex < 0 ? 'Start' : 'Next step';
+}
+makeTabs('scenarioTabs', SCENARIOS, item => {
+  scenario = item;
+  stepIndex = -1;
+  $('scenarioSaid').textContent = item.said;
+  $('scenarioReply').textContent = item.reply;
+  $('scenarioLesson').textContent = item.lesson;
+  renderSteps();
+});
+$('stepNext').addEventListener('click', () => { stepIndex += 1; renderSteps(); });
+$('stepReset').addEventListener('click', () => { stepIndex = -1; renderSteps(); });
+
+// Modes
+const lane = parts => el('div', { class: 'lane' }, ...parts.map(([cls, flex, text]) => el('span', { class: cls, style: `flex:${flex} 1 0` }, text)));
+const MODES = [
+  { label: 'one_call', title: 'Ask everything once, with a topic list',
+    build: () => [lane([['c-jev', 2, 'Jev: everything'], ['c-llm', 3, 'LLM'], ['c-tts', 1, 'Voice']])],
+    points: ['<strong>Good:</strong> one Jev call, 196 ms median.', '<strong>Bad:</strong> Jev has to guess from headings, without the real knowledge.', '<strong>Measured:</strong> answerable accuracy 90%.'] },
+  { label: 'two_call', title: 'Route first, then check with the knowledge loaded',
+    build: () => [lane([['c-jev', 2, 'Jev: route'], ['c-gate', 2, 'Jev: check'], ['c-llm', 3, 'LLM'], ['c-tts', 1, 'Voice']])],
+    points: ['<strong>Good:</strong> Jev judges against the real file. This is what the live agent uses.', '<strong>Bad:</strong> two calls on the critical path, about 190 ms plus 200 ms.', '<strong>Measured:</strong> answerable accuracy 97%.'] },
+  { label: 'two_call_parallel', title: 'Check and write at the same time',
+    build: () => [lane([['c-jev', 2, 'Jev: route'], ['c-gate', 4, 'Jev: check, racing the LLM']]), el('div', { class: 'lane-label' }, 'Running at the same time, and nothing is spoken until the check passes:'), lane([['c-jev', 2, ''], ['c-llm', 4, 'LLM writing'], ['c-tts', 1, 'Voice']])],
+    points: ['<strong>Good:</strong> the check might add no delay, because the LLM has already started.', '<strong>Bad:</strong> a decline wastes an LLM call, which matters on a free tier.', '<strong>Not measured:</strong> built and tested with mocks, but not benchmarked.'] },
+];
+makeTabs('modeTabs', MODES, item => {
+  $('modePanel').replaceChildren(el('h3', {}, item.title), ...item.build(), el('ul', { style: 'margin-top:12px' }, ...item.points.map(point => el('li', { html: point }))));
+}, 1);
+
+// Routing
+const ALL_FILES = ['plans.md', 'overview.md', 'billing_policy.md', 'coverage_and_outages.md', 'roaming.md', 'devices_and_sim.md'];
+const INTENTS = [
+  { label: 'billing', what: 'Bills, charges, due dates, late fees, payments, refunds, or disputes.', files: ['billing_policy.md'] },
+  { label: 'plan_info', what: 'Plans, bundles, prices, and general company details.', files: ['plans.md', 'overview.md'] },
+  { label: 'plan_change', what: 'Moving to a different plan, or when a change takes effect.', files: ['billing_policy.md', 'plans.md'] },
+  { label: 'coverage_outage', what: 'Coverage in a place, or a known outage.', files: ['coverage_and_outages.md'] },
+  { label: 'roaming', what: 'Using the phone abroad.', files: ['roaming.md'] },
+  { label: 'device_sim', what: 'SIMs, eSIM, lost phones, moving numbers, installments, unlocking.', files: ['devices_and_sim.md'] },
+  { label: 'technical_issue', what: 'Something isn\'t working.', files: ['coverage_and_outages.md'] },
+  { label: 'complaint', what: 'Complaining, or demanding compensation or cancellation.', files: ['billing_policy.md'] },
+  { label: 'account_lookup', what: 'Details from a specific account. The record is added only after identity checks.', files: ['billing_policy.md'] },
+  { label: 'human_request', what: 'Asking for a person. A fixed line answers, with no files.', files: [] },
+  { label: 'out_of_scope', what: 'Unrelated, or about other companies. No knowledge, so nothing to invent from.', files: [] },
+  { label: 'chitchat', what: 'Greetings, thanks, and goodbyes. No files, but a follow-up can reuse the last one.', files: [] },
+];
+makeTabs('intentTabs', INTENTS, item => {
+  $('intentWhat').textContent = item.what;
+  $('fileChips').replaceChildren(...ALL_FILES.map(file => el('span', { class: 'file' + (item.files.includes(file) ? ' on' : '') }, (item.files.includes(file) ? 'Loaded: ' : '') + file)),
+    el('span', { class: 'file on' }, 'Always: support_policy.md'));
+}, 1);
+
+// Identity
+const IDENTITY = [
+  { name: 'Level 0', sub: 'Not verified', text: 'The default. Anyone can ask about plans, prices, coverage, and outages. The LLM has no customer data at all.', needs: 'Nothing' },
+  { name: 'Level 1', sub: 'Can read the account', text: 'Unlocks balance, usage, bills, tickets, and orders. A half-heard phone number doesn\'t count as a failure. The agent just asks for it again.', needs: 'Full phone number, full name, and last four ID digits' },
+  { name: 'Level 2', sub: 'Can change the account', text: 'Needed for a plan change, a bundle, or roaming. On this test line, the agent still can\'t carry these out. It only explains the next step.', needs: 'Everything above, plus date of birth' },
+  { name: 'Locked', sub: 'Three failed checks', text: 'After three wrong attempts, it shares nothing and points to an agent. It never says which detail was wrong.', needs: 'Three failures in one call' },
+  { name: 'Refused', sub: "Someone else's account", text: 'Jev flags the request, no ID is asked for, and even a verified caller\'s record is withheld for that turn. A representative needs a power of attorney at a store.', needs: 'about_another_person at 0.5 or more' },
+  { name: 'Bypass', sub: 'Needs a person', text: 'A caller who needs a human isn\'t held up by checks. The agent gives the next step, with no account data.', needs: 'needs_human at 0.7 or more, or intent human_request' },
+];
+const identityButtons = IDENTITY.map((item, index) => el('button', { type: 'button', 'aria-pressed': 'false', onclick: () => pickIdentity(index) }, el('strong', { style: 'display:block' }, item.name), el('span', { class: 'small muted' }, item.sub)));
+$('identityStates').replaceChildren(...identityButtons);
+function pickIdentity(index) {
+  identityButtons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
+  $('identityDetail').replaceChildren(el('p', {}, IDENTITY[index].text), el('p', { class: 'small', style: 'margin:0', html: '<strong>Trigger or needs:</strong> ' + IDENTITY[index].needs }));
+}
+pickIdentity(1);
+
+// Voice sliders. Same thresholds as agent/voice_cues.py.
+function updateVoice() {
+  const loud = Number($('vLoud').value), pitch = Number($('vPitch').value), rate = Number($('vRate').value);
+  $('vLoudText').textContent = (loud > 0 ? '+' : '') + loud + ' dB';
+  $('vPitchText').textContent = (pitch > 0 ? '+' : '') + pitch + ' semitones';
+  $('vRateText').textContent = (rate > 0 ? '+' : '') + rate + '%';
+  const cues = [];
+  if (loud >= 3) cues.push('louder'); else if (loud <= -3) cues.push('quieter');
+  if (pitch >= 2) cues.push('higher pitched'); else if (pitch <= -2) cues.push('lower pitched');
+  if (rate >= 20) cues.push('faster'); else if (rate <= -20) cues.push('slower');
+  $('vLabel').textContent = 'Voice: ' + (cues.length ? cues.join(', ') : 'steady');
+  $('vSentence').textContent = `"Compared with earlier in this call, the caller's voice sounds ${cues.length ? cues.join(' and ') : 'about the same'}. This comes from audio measurements, and it can have other causes, such as background noise."`;
+}
+['vLoud', 'vPitch', 'vRate'].forEach(id => $(id).addEventListener('input', updateVoice));
+updateVoice();
+
+// Timing. Differences between medians from real calls.
+const TIMING = [['Speech to text', 474, 's-stt'], ['Jev and gates', 522, 's-jev'], ['LLM first word', 494, 's-llm'], ['Voice first audio', 197, 's-tts']];
+function renderTiming() {
+  const withWait = $('vadToggle').checked;
+  const parts = (withWait ? [['Silence wait', 500, 's-wait']] : []).concat(TIMING);
+  const total = parts.reduce((sum, part) => sum + part[1], 0);
+  $('timingStack').replaceChildren(...parts.map(([name, value, color]) => el('span', { style: `flex:${value} 1 0;background:var(--${color})`, title: `${name}: about ${value} ms` })));
+  $('timingLegend').replaceChildren(...parts.map(([name, value, color]) => el('span', {}, el('i', { class: 'swatch', style: `background:var(--${color})` }), `${name}: ~${value} ms`)));
+  $('timingTotal').textContent = (total / 1000).toFixed(1) + ' s';
+  $('timingTotalLabel').textContent = withWait ? 'Roughly what the caller feels, from stopping talking' : 'End of speech to first audio, when the LLM is used';
+}
+$('vadToggle').addEventListener('change', renderTiming);
+renderTiming();
+
+// Charts
+function barChart(host, groups, max, series, unit) {
+  host.replaceChildren(...groups.map(group => el('div', { class: 'bar-group' },
+    el('div', { class: 'bar-title' }, group.name),
+    ...series.map(item => {
+      const value = group.values[item.key];
+      return el('div', { class: 'bar-row', title: `${group.name}, ${item.name}: ${value}${unit}` },
+        el('span', { class: 'muted' }, item.name),
+        el('span', { class: 'bar-track' }, el('span', { class: 'bar-fill', style: `width:${(value / max) * 100}%;background:var(--${item.color})` })),
+        el('span', { class: 'bar-value mono' }, value.toLocaleString('en-US') + unit));
+    }))));
+}
+barChart($('latencyChart'), [
+  { name: 'Median', values: { jev: 190, llm: 484 } },
+  { name: 'p95 (slow calls)', values: { jev: 227, llm: 1504 } },
+], 1504, [{ key: 'jev', name: 'Jev', color: 's-jev' }, { key: 'llm', name: 'Classifier', color: 's-other' }], ' ms');
+
+const ACC = [
+  { name: 'intent', values: { two: 79, one: 85, llm: 73 } },
+  { name: 'needs_human', values: { two: 93, one: 96, llm: 91 } },
+  { name: 'answerable_from_kb', values: { two: 97, one: 90, llm: 77 } },
+  { name: 'sentiment', values: { two: 70, one: 76, llm: 78 } },
+  { name: 'urgency', values: { two: 83, one: 80, llm: 79 } },
+];
+makeTabs('accuracyTabs', [
+  { label: 'Jev two_call and classifier', key: 'two', name: 'Jev two_call', note: 'In two-call mode, Jev had the real knowledge file for answerable_from_kb and the classifier had a topic list, which favors Jev on that field.' },
+  { label: 'Jev one_call and classifier', key: 'one', name: 'Jev one_call', note: 'This is the fairer comparison, because both had the same topic list. Jev leads on four fields, and the classifier leads on sentiment, by two points.' },
+], item => {
+  const series = [{ key: item.key, name: 'Jev', color: 's-jev' }, { key: 'llm', name: 'Classifier', color: 's-other' }];
+  $('accuracyLegend').replaceChildren(el('span', {}, el('i', { class: 'swatch', style: 'background:var(--s-jev)' }), item.name), el('span', {}, el('i', { class: 'swatch', style: 'background:var(--s-other)' }), 'gpt-oss-20b classifier'));
+  barChart($('accuracyChart'), ACC, 100, series, '%');
+  $('accuracyNote').textContent = item.note;
+});
+
+// Story
+const STORY = [
+  ['Groq had shut down both Llama models from the brief', 'Switched replies to qwen3.8-27b with reasoning off, the fallback to gpt-oss-120b, and the classifier to gpt-oss-20b.'],
+  ['"Company" was heard as "comedy"', 'Added a short hint to Whisper with company and plan names.'],
+  ['A half-heard phone number counted as a failed ID check', 'Short digits are now kept and joined, and the agent asks again with no failure.'],
+  ['"Thank you" got asked for ID again', 'Greetings and off-topic remarks now drop the pending check.'],
+  ['A 7-second silence while waiting on a rate limit', 'On a live call, it now switches to the fallback model straight away.'],
+  ['Pausing mid-sentence lost the first half', 'If no reply has been heard yet, the two pieces are joined into one question.'],
+  ['"So when is it fixed?" asked for ID', 'Rewrote the account question so general outage and plan questions don\'t trigger a check.'],
+  ['"Calling for my wife" got an ID request', 'Added an about_another_person decision that refuses before any check.'],
+  ['Replies said "pence", and read phone numbers as digits', 'Added clear speech rules, and a fixed line for asking for a person.'],
+  ['Mood only came from words', 'Added measured voice cues for loudness, pitch, and speed.'],
+];
+$('storyList').replaceChildren(...STORY.map(([problem, fix]) => el('li', {}, el('div', {}, el('strong', {}, 'What went wrong'), problem), el('div', {}, el('strong', {}, 'The fix'), fix))));
+
+// Code map
+const CODE = [
+  ['company/', 'The fictional company', 'The knowledge base: plans, billing, coverage, roaming, devices, and support policy, plus 46 FAQs, 18 plans, 15 mock customers, 10 tickets, and 10 orders. Everything is invented.'],
+  ['tests/', 'Test questions and validator', '100 spoken-style questions with labels, and validate.py, which checks the company files are consistent with each other.'],
+  ['voice_agent/agent/turn.py', 'The heart of a turn', 'stream_turn runs one caller turn: identity, Jev, gates, knowledge, and the streamed reply. Live mode and the benchmark both use it, so they test the same logic.'],
+  ['voice_agent/agent/decisions.py', "Jev's instructions", 'Every question and its criteria, plus the code that reads the answers. Edit this to change how Jev decides.'],
+  ['voice_agent/agent/jev.py', 'Jev client', 'Sends requests to TypeSafe, retries on 429 and 529 as the docs advise, and keeps the wait out of the latency figure.'],
+  ['voice_agent/agent/kb.py', 'Knowledge routing', 'Loads files, maps intent to files, and removes identity details from customer records.'],
+  ['voice_agent/agent/identity.py', 'Identity checks', 'The levels, failure counting, and the comparison in code.'],
+  ['voice_agent/agent/prompts.py', "The LLM's instructions", 'Style rules, limits, and the fixed lines that need no LLM.'],
+  ['voice_agent/agent/voice_cues.py', 'Voice measurements', 'Loudness, pitch, speed, and the comparison with earlier in the call.'],
+  ['voice_agent/agent/providers/', 'Swappable modules', 'Speech to text, LLM, and voice for the benchmark. Change providers in .env.'],
+  ['voice_agent/live/', 'The live call', 'The server, the Pipecat pipeline, the call page, and the live state that the page polls.'],
+  ['voice_agent/benchmark/', 'Measurements', 'decisions_bench runs the 100 questions, e2e_bench runs full turns, and report builds results/REPORT.md.'],
+  ['voice_agent/tests/', 'Automated tests', 'Local stand-ins for the APIs, so 28 tests run with no keys. They prove the logic works, not real speed or accuracy.'],
+  ['voice_agent/.env', 'Your keys and settings', 'API keys, model IDs, thresholds, and JEV_MODE. Never commit or share it.'],
+];
+$('codeTree').replaceChildren(...CODE.map(([path, what, more]) => {
+  const detail = el('div', { class: 'more', hidden: '' }, more);
+  const button = el('button', { type: 'button', 'aria-expanded': 'false', onclick: () => {
+    const open = detail.hidden;
+    detail.hidden = !open;
+    button.setAttribute('aria-expanded', String(open));
+  } }, el('span', { class: 'path' }, path), el('span', { class: 'what' }, what));
+  return el('div', {}, button, detail);
+}));
+
+// Scripts
+const SCRIPTS = [
+  { label: '30 seconds', text: `<p>Using Claude Code, I built a voice customer-service agent for a fictional Egyptian telecom, to test a new kind of model called Jev. Jev doesn't write text. It makes fast, typed decisions, like what the caller wants and whether we can answer it. A separate LLM then speaks the reply using only the knowledge Jev selected.</p><p>On 100 labeled questions, Jev took about 190 milliseconds, compared with 484 for a small LLM doing the same job, and it was steadier and mostly as accurate or better. Sentiment was its weak spot.</p>` },
+  { label: '2 minutes', text: `<p><strong>The goal.</strong> TypeSafe says Jev decides in 70 to 500 milliseconds. I wanted to test that inside a real voice agent, and measure accuracy too.</p><p><strong>The system.</strong> You talk in the browser. Whisper turns speech into text, Jev makes the decisions, a Qwen LLM writes the reply, and Cartesia speaks it. Everything streams, so audio starts after the first sentence.</p><p><strong>The key idea.</strong> Jev's intent decision chooses which knowledge file goes to the LLM, so prompts stay small and Jev's decision directly shapes the answer. Safety is in code: the LLM doesn't get a customer's record until Python has checked their details.</p><p><strong>The results.</strong> A Jev routing call had a median of 190 milliseconds and a p95 of 227, within the vendor's range. The LLM classifier took 484 and 1,504. Accuracy was close on most fields, Jev was better on answerable questions, and the classifier was better on sentiment. On real calls, first audio came about 1.7 seconds after speech ended, from a small sample.</p><p><strong>The honest part.</strong> Claude Code generated the labels along with the company data, the sample is small, and the full end-to-end benchmark isn't finished.</p>` },
+  { label: '5 minutes', text: `<p><strong>1. The problem.</strong> Voice agents need to feel instant, but an LLM is slow at simple decisions and can invent answers. Jev is a decision model: it returns typed answers instead of text. The vendor reports 70 to 500 milliseconds, and I wanted to check that.</p><p><strong>2. What I built, using Claude Code.</strong> Nabda, a fictional Egyptian telecom with plans, policies, outages, and 15 mock customers, and a voice agent you can call from a browser. Only the voice detector runs locally.</p><p><strong>3. How a turn works.</strong> Silence ends your turn. Whisper produces text. Jev answers typed questions in one request. Code acts on those answers: it picks files, asks for ID, refuses, or hands off. Then the LLM writes, and Cartesia speaks the first sentence as soon as it's ready.</p><p><strong>4. The hardest design problem.</strong> Answerability needs the knowledge, but the knowledge depends on the intent. So I built three modes. One call with a topic list scored 90% on that field. Two calls scored 97%, but adds about 200 milliseconds. A third runs the check alongside the LLM, which I haven't benchmarked. The live agent uses two calls.</p><p><strong>5. Safety.</strong> The customer's record stays out of the prompt until code verifies the caller. Identity details never reach the reply model, and three failures lock the check.</p><p><strong>6. Results.</strong> Jev was faster and far more consistent than the classifier. On accuracy, the fair comparison is one-call Jev against the classifier: Jev led on four fields, and the classifier led slightly on sentiment.</p><p><strong>7. What real calls taught me.</strong> Tests passed, yet real speech broke things: "company" was heard as "comedy", half-heard phone numbers failed checks, and "thank you" triggered ID requests. I fixed those, and added measured voice cues because text can't carry tone.</p><p><strong>8. Limits and next steps.</strong> The labels were generated with the company data, so they aren't independent. The accuracy run predates later changes, and the end-to-end benchmark isn't finished. Next, I'd complete 20 or more measured runs, compare the modes, and test voice cues on real angry speech.</p>` },
+];
+makeTabs('scriptTabs', SCRIPTS, item => { $('scriptText').innerHTML = item.text; }, 1);
+
+// Q and A
+const QA = [
+  ['Why not just use one LLM for everything?', 'You could. But a decision layer is faster, costs less, and gives typed outputs that code can act on. An LLM doing the same classification took 484 ms against Jev\'s 190 ms, and its slow calls were far slower. The LLM also has to write the reply anyway, so this splits the two jobs.'],
+  ['Is Jev actually fast?', 'In these tests, yes. A single call had a median of 190 ms and a p95 of 227 ms from Cairo, inside the vendor\'s range. Two calls per turn take about 400 ms. It\'s one location and one period, so it isn\'t a general result.'],
+  ['Is Jev more accurate than the LLM?', 'Partly. With the same information, it led on most fields, and the classifier led slightly on sentiment. Many gaps are small enough to be noise on 100 questions, and the labels aren\'t independent.'],
+  ['Is it free?', 'Nearly. Whisper and the LLM use Groq\'s free tier, and Cartesia a free tier. Jev costs about $0.0002 a turn in two-call mode. The cost of free is rate limits: about 8,000 tokens a minute per model, which can force the fallback model.'],
+  ['What stops it leaking customer data?', 'The record isn\'t in the prompt until Python verifies the phone number, name, and last four ID digits. Identity details are stripped even then. A jailbreak can\'t reveal data the model was never given.'],
+  ['Can it make mistakes?', 'Yes. It can mishear, misroute, or pick a wrong valid option, and in the benchmark Jev wrongly flagged some questions as needing a human. That\'s why accuracy is measured alongside speed, and why the rules live in code.'],
+  ['Does it know if the caller is angry?', 'From words, and from relative changes in loudness, pitch, and speed. It can\'t detect sarcasm reliably, and voice cues haven\'t been proven on real angry speech yet.'],
+  ['Why does the agent say it\'s a test line?', 'It has no tools, so it can\'t really block a line or transfer a call. It says so rather than falsely claiming it did something.'],
+  ['What would you do next?', 'Finish 20 or more measured runs, compare the three modes on full turns, rerun accuracy on the current version, get independent labels, and add real tools for actions.'],
+];
+$('qaList').replaceChildren(...QA.map(([q, a]) => el('details', {}, el('summary', {}, q), el('div', {}, a))));
+
+// Quiz
+const QUIZ = [
+  { q: 'What does Jev produce?', options: ['The spoken reply', 'Typed decisions with probabilities', 'Audio', 'Text from speech'], right: 1, why: 'Jev returns choices, scores, and yes probabilities. The LLM writes the reply.' },
+  { q: 'Why does Jev choose the knowledge file?', options: ['Jev is the only model that can read files', 'To keep prompts small and make its decision shape the answer', 'Because the LLM can\'t read Markdown', 'To avoid using Whisper'], right: 1, why: 'Smaller prompts save free-tier tokens and time, and Jev\'s routing decides what the LLM can use.' },
+  { q: 'What stops a jailbreak from revealing a customer\'s balance?', options: ['A stronger prompt', 'The record isn\'t in the prompt until code verifies the caller', 'Jev blocks all such requests', 'Whisper filters the words'], right: 1, why: 'Enforcing it in code means there\'s no data for the model to reveal.' },
+  { q: 'Why does two_call mode need a second Jev call?', options: ['The first one often fails', 'Judging answerability needs the knowledge, which depends on the intent', 'For the sentiment question', 'To save money'], right: 1, why: 'The first call picks the file, and the second judges against it. That order is the design problem.' },
+  { q: 'Which result is the fairest for accuracy on answerable_from_kb?', options: ['Jev 97% against 77%', 'Jev 90% against 77%, with the same topic list', 'Jev 100%', 'The classifier wins'], right: 1, why: 'At 97%, Jev had the real file, which the classifier didn\'t. At 90%, both had the same information.' },
+  { q: 'How does the agent get a sense of tone, given Jev can\'t take audio?', options: ['Whisper labels emotion', 'Cartesia measures it', 'Code measures loudness, pitch, and speed, and sends Jev a sentence', 'It can\'t'], right: 2, why: 'The measurements compare with earlier in the call, then reach Jev as text.' },
+  { q: 'What does t_total measure?', options: ['The whole call', 'End of speech to first audio', 'Jev\'s latency', 'Audio playback time'], right: 1, why: 'It runs from the voice detector ending your turn to the first audio from Cartesia. The silence wait comes before it.' },
+  { q: 'Which is an honest limit of the results?', options: ['Jev wasn\'t tested', 'The labels weren\'t written independently, and the end-to-end benchmark is unfinished', 'No real APIs were used', 'The tests all failed'], right: 1, why: 'Real APIs and 100 questions were used, but the labels and sample size limit what you can claim.' },
+];
+let answered = 0, correct = 0;
+function renderQuiz() {
+  answered = 0; correct = 0;
+  $('quizScore').textContent = `Score: 0 of ${QUIZ.length}`;
+  $('quiz').replaceChildren(...QUIZ.map((item, number) => {
+    const why = el('p', { class: 'why', hidden: '' });
+    const buttons = item.options.map((option, index) => el('button', { type: 'button', onclick: event => {
+      buttons.forEach(button => { button.disabled = true; });
+      buttons[item.right].classList.add('right');
+      const isRight = index === item.right;
+      if (!isRight) event.currentTarget.classList.add('wrong');
+      why.textContent = (isRight ? 'Correct. ' : 'Not quite. ') + item.why;
+      why.hidden = false;
+      answered += 1;
+      if (isRight) correct += 1;
+      $('quizScore').textContent = `Score: ${correct} of ${QUIZ.length}` + (answered === QUIZ.length ? (correct === QUIZ.length ? '. You\'re ready.' : '. Reread the sections you missed.') : '');
+    } }, option));
+    return el('div', { class: 'quiz-q' }, el('p', {}, `${number + 1}. ${item.q}`), ...buttons, why);
+  }));
+}
+renderQuiz();
+$('quizReset').addEventListener('click', renderQuiz);
+
+// Checklist
+const READY = ['I can say what Jev is in one sentence.', 'I can draw the pipeline from memory.', 'I can explain why there are three Jev modes.', 'I can explain why safety is in code.', 'I can give the main latency and accuracy numbers.', 'I can name the limits without being asked.'];
+$('readyList').replaceChildren(...READY.map((text, index) => el('li', {}, el('input', { type: 'checkbox', id: 'ready' + index }), el('label', { for: 'ready' + index }, text))));
+
+// Navigation and progress
+const sections = [...document.querySelectorAll('main section')];
+const seen = new Set();
+const links = sections.map(section => {
+  const link = el('a', { href: '#' + section.id }, el('span', { class: 'tick', 'aria-hidden': 'true' }, ''), section.dataset.title);
+  return link;
+});
+$('navLinks').replaceChildren(...links);
+function updateProgress() {
+  $('progressText').textContent = `${seen.size} of ${sections.length} sections read`;
+  $('progressBar').style.width = (seen.size / sections.length) * 100 + '%';
+}
+updateProgress();
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    const index = sections.indexOf(entry.target);
+    if (entry.isIntersecting) {
+      seen.add(index);
+      links[index].querySelector('.tick').textContent = '✓';
+      links.forEach((link, i) => link.classList.toggle('current', i === index));
+      links[index].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      updateProgress();
+    }
+  });
+}, { rootMargin: '-35% 0px -55% 0px' });
+sections.forEach(section => observer.observe(section));
+
+// Theme
+(function () {
+  const root = document.documentElement;
+  try { const saved = localStorage.getItem('guide-theme'); if (saved) root.dataset.theme = saved; } catch (error) { /* Storage can be blocked, and the system theme still works. */ }
+  $('theme').addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('guide-theme', root.dataset.theme); } catch (error) { /* See above. */ }
+  });
+})();
+</script>
+</body>
+</html>

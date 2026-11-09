@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nabda Voice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&family=Fira+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f1f5f9; --surface: #ffffff; --surface-2: #f8fafc; --text: #0f172a; --muted: #475569; --line: #cbd5e1;
+    --accent: #15803d; --accent-hover: #166534; --on-accent: #ffffff; --danger: #b91c1c; --danger-hover: #991b1b; --on-danger: #ffffff;
+    --caller-bg: #dcfce7; --caller-text: #14532d; --warn-bg: #fef3c7; --warn-text: #78350f; --error-bg: #fee2e2; --error-text: #7f1d1d;
+    --stt: #2563eb; --jev: #15803d; --llm: #b45309; --tts: #7c3aed; --focus: #2563eb;
+    --sans: "Fira Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --mono: "Fira Code", ui-monospace, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #0f172a; --surface: #1e293b; --surface-2: #273449; --text: #f8fafc; --muted: #cbd5e1; --line: #475569;
+    --accent: #22c55e; --accent-hover: #4ade80; --on-accent: #052e16; --danger: #f87171; --danger-hover: #fca5a5; --on-danger: #450a0a;
+    --caller-bg: #14532d; --caller-text: #dcfce7; --warn-bg: #451a03; --warn-text: #fde68a; --error-bg: #450a0a; --error-text: #fecaca;
+    --stt: #60a5fa; --jev: #4ade80; --llm: #fbbf24; --tts: #c4b5fd; --focus: #93c5fd;
+  } }
+  :root[data-theme="dark"] {
+    --bg: #0f172a; --surface: #1e293b; --surface-2: #273449; --text: #f8fafc; --muted: #cbd5e1; --line: #475569;
+    --accent: #22c55e; --accent-hover: #4ade80; --on-accent: #052e16; --danger: #f87171; --danger-hover: #fca5a5; --on-danger: #450a0a;
+    --caller-bg: #14532d; --caller-text: #dcfce7; --warn-bg: #451a03; --warn-text: #fde68a; --error-bg: #450a0a; --error-text: #fecaca;
+    --stt: #60a5fa; --jev: #4ade80; --llm: #fbbf24; --tts: #c4b5fd; --focus: #93c5fd;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--sans); }
+  button { font: inherit; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  svg { display: block; flex: none; }
+  [hidden] { display: none !important; }
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+  .app { max-width: 1240px; min-height: 100%; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .logo { width: 36px; height: 36px; border-radius: 8px; background: var(--accent); color: var(--on-accent); display: grid; place-items: center; }
+  .brand strong { display: block; font-size: 18px; font-weight: 600; line-height: 1.2; }
+  .brand span { display: block; color: var(--muted); font-size: 14px; line-height: 1.3; }
+  .icon-button { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); transition: background-color .2s; }
+  .icon-button:hover { background: var(--surface-2); }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; flex: 1; min-height: 0; }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+  .side { display: flex; flex-direction: column; gap: 16px; }
+  .side .panel { padding: 16px; }
+  h2 { margin: 0; font-size: 16px; font-weight: 600; }
+  .hint { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+
+  .call { display: flex; flex-direction: column; min-height: 640px; max-height: calc(100vh - 100px); }
+  .controls { padding: 16px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .state { flex: 1 1 200px; min-width: 0; }
+  .state-line { display: flex; align-items: center; gap: 10px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--muted); flex: none; }
+  .state-word { font-size: 20px; font-weight: 600; line-height: 1.3; }
+  .state-sub { color: var(--muted); font-size: 14px; }
+  [data-state="listening"] .dot, [data-state="hearing"] .dot { background: var(--accent); }
+  [data-state="thinking"] .dot, [data-state="connecting"] .dot { background: var(--llm); }
+  [data-state="speaking"] .dot { background: var(--tts); }
+  .bars { display: flex; align-items: center; gap: 4px; height: 36px; width: 56px; flex: none; }
+  .bars i { display: block; width: 6px; height: 100%; border-radius: 3px; background: var(--line); transform: scaleY(.12); transition: transform 80ms linear; }
+  [data-state="hearing"] .bars i, [data-state="listening"] .bars i { background: var(--accent); }
+  [data-state="speaking"] .bars i { background: var(--tts); }
+  .actions { display: flex; align-items: center; gap: 8px; }
+  .primary { min-height: 48px; padding: 0 20px; border: 0; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; background: var(--accent); color: var(--on-accent); transition: background-color .2s; }
+  .primary:hover { background: var(--accent-hover); }
+  .primary.end { background: var(--danger); color: var(--on-danger); }
+  .primary.end:hover { background: var(--danger-hover); }
+  .primary:disabled { opacity: .6; cursor: wait; }
+  .icon-button[aria-pressed="true"] { background: var(--warn-bg); color: var(--warn-text); border-color: var(--warn-text); }
+
+  .alert { margin: 16px 16px 0; padding: 12px 16px; border-radius: 8px; background: var(--error-bg); color: var(--error-text); font-size: 15px; }
+  .alert strong { display: block; font-weight: 600; }
+  .alert[hidden] { display: none; }
+
+  .transcript { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-height: 240px; }
+  .empty { margin: auto; max-width: 400px; text-align: center; color: var(--muted); padding: 24px 0; }
+  .empty svg { margin: 0 auto 12px; }
+  .empty strong { display: block; color: var(--text); font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .msg { max-width: min(78%, 620px); }
+  .msg .who { font-size: 13px; color: var(--muted); margin-bottom: 2px; }
+  .bubble { padding: 10px 14px; border-radius: 12px; overflow-wrap: anywhere; }
+  .caller { align-self: flex-end; }
+  .caller .who { text-align: right; }
+  .caller .bubble { background: var(--caller-bg); color: var(--caller-text); border-bottom-right-radius: 4px; }
+  .agent .bubble { background: var(--surface-2); border-bottom-left-radius: 4px; }
+  .caller .meta { justify-content: flex-end; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 4px; font-size: 13px; color: var(--muted); }
+  .tag { padding: 0 6px; border-radius: 4px; background: var(--warn-bg); color: var(--warn-text); }
+  .typing { color: var(--muted); font-style: italic; }
+
+  .latency-total { font-size: 32px; font-weight: 500; line-height: 1.2; margin-top: 12px; }
+  .latency-total small { font: 400 14px var(--sans); color: var(--muted); margin-left: 4px; }
+  .stack { display: flex; height: 12px; border-radius: 6px; overflow: hidden; background: var(--surface-2); margin: 12px 0; gap: 2px; }
+  .stack span { display: block; min-width: 2px; }
+  .legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
+  .legend li { display: flex; align-items: center; gap: 8px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+  .legend .value { margin-left: auto; }
+  .stt { background: var(--stt); } .jev { background: var(--jev); } .llm { background: var(--llm); } .tts { background: var(--tts); }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 14px; }
+  th, td { padding: 6px 0; border-bottom: 1px solid var(--line); text-align: right; font-weight: 400; }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { color: var(--muted); font-size: 13px; }
+  tbody tr:last-child td { border-bottom: 0; font-weight: 500; }
+
+  details summary { cursor: pointer; font-weight: 600; min-height: 28px; display: flex; align-items: center; justify-content: space-between; list-style: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary svg { transition: transform .2s; }
+  details[open] summary svg { transform: rotate(180deg); }
+  .tips { margin: 8px 0 0; padding-left: 18px; font-size: 14px; display: grid; gap: 4px; }
+  h3 { margin: 12px 0 0; font-size: 14px; font-weight: 600; color: var(--muted); }
+  .account { margin-top: 6px; font-size: 14px; }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    .call { min-height: 70vh; max-height: none; }
+    .transcript { max-height: 60vh; }
+    .msg { max-width: 90%; }
+  }
+  @media (max-width: 480px) {
+    .actions { width: 100%; }
+    .primary { flex: 1; }
+    .brand span { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+    .bars { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 8L9 4l-3 8H2"/></svg></div>
+      <div><strong>Nabda voice test</strong><span>A fictional telecom, for measuring the Jev agent</span></div>
+    </div>
+    <button class="icon-button" id="theme" type="button" aria-label="Switch color theme">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </header>
+
+  <main class="layout">
+    <section class="panel call" id="call" data-state="idle" aria-label="Call">
+      <div class="controls">
+        <div class="state">
+          <div class="state-line">
+            <span class="dot" aria-hidden="true"></span>
+            <span class="state-word" id="stateWord" role="status">Ready to call</span>
+          </div>
+          <div class="state-sub" id="stateSub">Press start and allow your microphone.</div>
+        </div>
+        <div class="actions">
+          <button class="icon-button" id="mute" type="button" aria-label="Mute microphone" aria-pressed="false" hidden>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4"/></svg>
+          </button>
+          <button class="primary" id="callButton" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+            <span id="callLabel">Start call</span>
+          </button>
+        </div>
+      </div>
+      <div class="alert" id="alert" role="alert" hidden></div>
+      <div class="transcript" id="transcript" tabindex="0" aria-label="Conversation">
+        <div class="empty" id="empty">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <strong>Your conversation appears here</strong>
+          Talk naturally. You can pause, or interrupt the assistant while it's speaking.
+        </div>
+      </div>
+    </section>
+
+    <aside class="side" aria-label="Measurements and help">
+      <section class="panel">
+        <h2>Latest turn</h2>
+        <p class="hint" id="latestHint">Time from when you stop talking to the first audio.</p>
+        <div class="latency-total mono" id="latestTotal">--</div>
+        <div class="stack" id="stack" aria-hidden="true"></div>
+        <ul class="legend">
+          <li><span class="swatch stt"></span>Speech to text<span class="value mono" id="vStt">--</span></li>
+          <li><span class="swatch jev"></span>Jev decisions<span class="value mono" id="vJev">--</span></li>
+          <li><span class="swatch llm"></span>Reply first word<span class="value mono" id="vLlm">--</span></li>
+          <li><span class="swatch tts"></span>Voice first audio<span class="value mono" id="vTts">--</span></li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <h2>This call</h2>
+        <p class="hint" id="summaryHint">Times are in milliseconds, from the end of speech.</p>
+        <table>
+          <thead><tr><th scope="col">Reached by</th><th scope="col">Median</th><th scope="col">p95</th></tr></thead>
+          <tbody id="summary"></tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <details open>
+          <summary>Things to try
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <ul class="tips">
+            <li>"How much is the Go Smart plan?"</li>
+            <li>"Is fiber down in Maadi?"</li>
+            <li>"How much is roaming in Dubai?"</li>
+            <li>"What's my balance?"</li>
+            <li>"I want to speak to a manager."</li>
+          </ul>
+          <h3>Test account</h3>
+          <div class="account">Mona Adel<br>Phone <span class="mono">0199 555 0101</span><br>Last four ID digits <span class="mono">4471</span></div>
+        </details>
+      </section>
+    </aside>
+  </main>
+</div>
+
+<script src="/vendor/ort.wasm.min.js"></script>
+<script src="/vendor/bundle.min.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# This folder holds other projects too, so only the voice agent project is tracked.
+/*
+!/.gitignore
+!/company/
+!/tests/
+!/voice_agent/
+
+node_modules/
+__pycache__/
+*.pyc
+.env
+.dev.vars
+.secrets.tmp
+.wrangler/

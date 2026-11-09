@@ -1,0 +1,131 @@
+{
+  "as_of": "2026-11-03T09:00",
+  "open_ticket_statuses": ["open", "in_progress", "pending_customer", "escalated"],
+  "closed_ticket_statuses": ["resolved", "closed"],
+  "open_order_statuses": ["processing", "shipped", "ready_for_pickup", "scheduled"],
+  "closed_order_statuses": ["delivered", "completed", "cancelled", "rejected"],
+  "tickets": [
+    {
+      "id": "TCK-5001", "customer_id": "CUST-1005", "category": "technical", "status": "in_progress", "priority": "high",
+      "opened_at": "2026-11-03T07:50", "updated_at": "2026-11-03T08:30", "team": "Network operations",
+      "related_outage": "OUT-2101", "expected_resolution": "2026-11-03T16:00",
+      "summary": "No home fiber service in Maadi. Linked to the known cut cable.",
+      "next_step": "Wait for the outage fix, then confirm service by text message."
+    },
+    {
+      "id": "TCK-5002", "customer_id": "CUST-1006", "category": "billing_dispute", "status": "in_progress", "priority": "medium",
+      "opened_at": "2026-10-25T11:20", "updated_at": "2026-10-29T14:05", "team": "Billing",
+      "related_outage": null, "expected_resolution": "2026-11-08",
+      "summary": "Customer disputes a Zone Two Day Pass of one hundred ninety pounds on the October bill. The customer says the phone was not used that day.",
+      "next_step": "Billing is reviewing usage records. The result will come by text message."
+    },
+    {
+      "id": "TCK-5003", "customer_id": "CUST-1008", "category": "technical", "status": "open", "priority": "high",
+      "opened_at": "2026-11-02T19:15", "updated_at": "2026-11-03T08:00", "team": "Network operations",
+      "related_outage": "OUT-2104", "expected_resolution": null,
+      "summary": "Home Air Pro down in Sixth of October South. Linked to the known outage.",
+      "next_step": "Engineers are working on it. No fix time is known. An update will come by text message."
+    },
+    {
+      "id": "TCK-5004", "customer_id": "CUST-1009", "category": "billing", "status": "pending_customer", "priority": "medium",
+      "opened_at": "2026-10-16T10:00", "updated_at": "2026-10-20T12:40", "team": "Billing",
+      "related_outage": null, "expected_resolution": null,
+      "summary": "Customer asked how to reconnect the suspended line.",
+      "next_step": "Waiting for the customer to pay seven hundred ten pounds, or to speak to billing about a payment plan."
+    },
+    {
+      "id": "TCK-5005", "customer_id": "CUST-1012", "category": "technical", "status": "in_progress", "priority": "medium",
+      "opened_at": "2026-10-30T16:45", "updated_at": "2026-11-02T09:10", "team": "Home support",
+      "related_outage": null, "expected_resolution": "2026-11-05",
+      "summary": "Home Air Lite router keeps restarting. Found to be faulty and within the first twelve months.",
+      "next_step": "Free replacement router is on its way under order ORD-7003."
+    },
+    {
+      "id": "TCK-5006", "customer_id": "CUST-1015", "category": "complaint", "status": "escalated", "priority": "high",
+      "opened_at": "2026-10-22T13:30", "updated_at": "2026-11-01T10:15", "team": "Complaints",
+      "related_outage": null, "expected_resolution": "2026-11-05",
+      "summary": "Slow fiber speed in evenings, third complaint about the same problem. Moved to the complaints manager.",
+      "next_step": "Technician visit booked for the fifth of November, between two p.m. and six p.m."
+    },
+    {
+      "id": "TCK-5007", "customer_id": "CUST-1001", "category": "billing", "status": "resolved", "priority": "low",
+      "opened_at": "2026-10-12T09:25", "updated_at": "2026-10-13T15:00", "team": "Billing",
+      "related_outage": null, "expected_resolution": null,
+      "summary": "Recharge card of fifty pounds failed. The balance was added by hand on the thirteenth of October.",
+      "next_step": "None. Resolved."
+    },
+    {
+      "id": "TCK-5008", "customer_id": "CUST-1004", "category": "complaint", "status": "open", "priority": "low",
+      "opened_at": "2026-11-01T18:05", "updated_at": "2026-11-01T18:05", "team": "Billing",
+      "related_outage": null, "expected_resolution": "2026-11-08",
+      "summary": "Customer says no text message arrived for the October bill.",
+      "next_step": "Billing will check message records. This ticket does not delay the due date or remove the late fee."
+    },
+    {
+      "id": "TCK-5009", "customer_id": "CUST-1010", "category": "technical", "status": "closed", "priority": "low",
+      "opened_at": "2026-10-22T20:10", "updated_at": "2026-10-23T11:30", "team": "Customer care",
+      "related_outage": null, "expected_resolution": null,
+      "summary": "Rollover data did not show after renewal. Three gigabytes was restored.",
+      "next_step": "None. Closed."
+    },
+    {
+      "id": "TCK-5010", "customer_id": "CUST-1007", "category": "technical", "status": "open", "priority": "low",
+      "opened_at": "2026-10-28T12:00", "updated_at": "2026-10-28T12:00", "team": "Network operations",
+      "related_outage": null, "expected_resolution": null,
+      "summary": "Weak indoor signal at home in Tanta. Network team has not reviewed it yet.",
+      "next_step": "Waiting for network review. No date is known."
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-7001", "customer_id": "CUST-1011", "type": "device_installment", "status": "delivered",
+      "item": "Kestrel A3, twelve months", "amount_egp": 6000, "placed_at": "2026-06-20", "expected_date": null, "completed_date": "2026-06-24",
+      "note": "First installment appeared on the first of July bill."
+    },
+    {
+      "id": "ORD-7002", "customer_id": "CUST-1014", "type": "sim_replacement", "status": "ready_for_pickup",
+      "item": "Replacement SIM", "amount_egp": 50, "placed_at": "2026-11-02", "expected_date": "2026-11-03", "completed_date": null,
+      "note": "Waiting at the Ismailia Center store. Courier delivery is not offered in Ismailia. Bring the original national ID."
+    },
+    {
+      "id": "ORD-7003", "customer_id": "CUST-1012", "type": "router_replacement", "status": "shipped",
+      "item": "Four G router for Home Air Lite", "amount_egp": 0, "placed_at": "2026-11-02", "expected_date": "2026-11-05", "completed_date": null,
+      "note": "Free replacement. Linked to ticket TCK-5005."
+    },
+    {
+      "id": "ORD-7004", "customer_id": "CUST-1015", "type": "fiber_installation", "status": "completed",
+      "item": "Home Fiber Two Hundred installation", "amount_egp": 0, "placed_at": "2026-01-11", "expected_date": null, "completed_date": "2026-01-18",
+      "note": "Installation fee was free with a twelve-month contract, which ends in January 2027."
+    },
+    {
+      "id": "ORD-7005", "customer_id": "CUST-1010", "type": "device_installment", "status": "cancelled",
+      "item": "Orbit X5, twenty-four months", "amount_egp": 19800, "placed_at": "2026-09-30", "expected_date": null, "completed_date": null,
+      "note": "Cancelled because prepaid lines cannot buy on installments."
+    },
+    {
+      "id": "ORD-7006", "customer_id": "CUST-1003", "type": "device_installment", "status": "processing",
+      "item": "Orbit X5, twenty-four months", "amount_egp": 19800, "placed_at": "2026-11-01", "expected_date": "2026-11-08", "completed_date": null,
+      "note": "Eight hundred twenty-five pounds a month. First payment appears on the next bill after delivery."
+    },
+    {
+      "id": "ORD-7007", "customer_id": "CUST-1013", "type": "esim", "status": "completed",
+      "item": "eSIM setup at store", "amount_egp": 30, "placed_at": "2026-08-14", "expected_date": null, "completed_date": "2026-08-14",
+      "note": "Done at the Luxor Center store."
+    },
+    {
+      "id": "ORD-7008", "customer_id": "CUST-1005", "type": "plan_change", "status": "scheduled",
+      "item": "Home Fiber Fifty to Home Fiber Two Hundred", "amount_egp": 0, "placed_at": "2026-11-02", "expected_date": "2026-12-01", "completed_date": null,
+      "note": "Home plan changes start on the next bill date. This was requested after the first of November, so it starts on the first of December."
+    },
+    {
+      "id": "ORD-7009", "customer_id": "CUST-1002", "type": "sim_replacement", "status": "delivered",
+      "item": "Replacement SIM by courier", "amount_egp": 90, "placed_at": "2026-09-02", "expected_date": null, "completed_date": "2026-09-04",
+      "note": "Fifty pounds for the SIM and forty pounds for the courier."
+    },
+    {
+      "id": "ORD-7010", "customer_id": "CUST-1004", "type": "device_installment", "status": "rejected",
+      "item": "Orbit Mini, twelve months", "amount_egp": 9600, "placed_at": "2026-10-30", "expected_date": null, "completed_date": null,
+      "note": "Rejected because the account has an overdue bill. The customer can apply again once it is paid."
+    }
+  ]
+}
